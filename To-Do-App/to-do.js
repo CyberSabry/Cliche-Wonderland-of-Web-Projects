@@ -14,12 +14,12 @@ function createToDoListItem() {
         let listItem = createElement('li', text, listContainer, 'list-item');
         let deleteButton = createElement('button', 'Delete', listItem, 'delete-button');
 
-        label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it:';
+        label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
         deleteButton.addEventListener('click', deleteListItem);
     }
     else {
 
-        label.innerHTML = 'Write something man:';
+        label.innerHTML = 'Write something dude';
     }
 }
 // So this one just so i can create any element in one line

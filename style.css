@@ -1,0 +1,106 @@
+:root {
+
+    --primery: hsl(0, 0%, 100%);
+    --primery-blured: hsla(0, 0%, 100%, 0.5);
+    --secondary: hsl(0, 0%, 0%);
+}
+html {
+
+    font-size: 16px;
+}
+* {
+
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+}
+body {
+
+    background: var(--primery);
+}
+header {
+
+    position: sticky;
+    top: 1rem;
+    left: 0;
+    display: flex;
+    align-items: center;
+    width: 90%;
+    height: 4rem;
+    margin: 0 auto 2rem auto;
+    padding: 1em;
+    border: 0.3125rem solid var(--secondary);
+    border-radius: 1rem;
+    background: var(--primery-blured);
+    backdrop-filter: blur(1rem);
+}
+header a {
+
+    position: absolute;
+    font-weight: 700;
+    color: var(--secondary);
+}
+header a:hover {
+
+    color: hsl(200, 100%, 50%);
+}
+header a:active {
+
+    color: hsl(225, 100%, 50%);
+}
+main {
+
+    width: 75%;
+    margin: 0 auto;
+}
+main a {
+
+    color: hsl(215, 100%, 50%);
+}
+main a:hover {
+
+    color: hsl(200, 100%, 50%);
+}
+main a:active {
+
+    color: hsl(225, 100%, 50%);
+}
+main input {
+
+    width: 25rem;
+    height: 2.5rem;
+    border: 0.1562rem solid var(--secondary);
+    border-radius: 0.5rem;
+}
+main input:hover {
+
+    border: 0.1562rem solid hsl(200, 100%, 50%);
+}
+main input:focus {
+
+    border: 0.1562rem solid hsl(225, 100%, 50%);
+    outline: none;
+}
+hr {
+
+    height: 0.3125rem;
+    border-radius: 1rem;
+    background: var(--secondary);
+}
+h1 {
+
+    margin: 0 auto;
+    color: var(--secondary);
+}
+h2 {
+
+    text-align: center;
+    margin: 2rem 0;
+    color: var(--secondary);
+}
+p {
+
+    margin: 1rem 0;
+    font-size: 1.25rem;
+    color: var(--secondary);
+}
