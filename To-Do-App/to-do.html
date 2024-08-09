@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do App</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="to-do.css">
 </head>
 <body>
     <header>
@@ -12,10 +13,19 @@
         <h1>To-Do</h1>
     </header>
     <main>
-        <h2 id="label">Please pretend that you saw this idea for the first time and embrace it</h2>
-        <input type="text" id="text-input">
-        <button id="add">Add</button>
-        <ol id="list-container"></ol>
+        <h2 class="label">Please pretend that you saw this idea for the first time and embrace it</h2>
+        <hr>
+        <input type="text" class="text-input">
+        <button class="add">Add</button>
+        <div class="container">
+            <ul class="list">
+                <li class="list__item">
+                    <input type="checkbox" id="1">
+                    <p>this is a demo</p>
+                    <button class="item__delete-button">Delete</button>
+                </li>
+            </ul>
+        </div>
     </main>
     <script src="to-do.js"></script>
 </body>
