@@ -5,7 +5,20 @@ main {
 }
 
 input[type="checkbox"]:checked + p {
-    text-decoration: line-through;
+    position: relative;
+}
+input[type="checkbox"]:checked + p::after {
+    content: "";
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate( -50%, -50% );
+    height: 0.1562rem;
+    width: calc( 100% + 1rem );
+    background: var(--secondary);
+}
+input[type="checkbox"] {
+    margin: 0;
 }
 
 .text-input {
@@ -16,8 +29,6 @@ input[type="checkbox"]:checked + p {
     width: 95%;
     margin: 1rem auto;
     padding: 1em 2em;
-    border: 0.3125rem solid var(--secondary);
-    border-radius: 1.5rem;
 }
 .container--hidden {
     display: none;
@@ -31,10 +42,27 @@ input[type="checkbox"]:checked + p {
 
 .list__item {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 1rem;
     width: 100%;
+    padding: 0 4rem 0 2rem;
+}
+.item__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+.item__checkbox {
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+.item__paragraph {
+    flex-shrink: 1;
+    text-align: start;
 }
 .item__delete-button {
-    margin-left: auto;
+    flex-shrink: 0;
+    flex-grow: 0;
 }

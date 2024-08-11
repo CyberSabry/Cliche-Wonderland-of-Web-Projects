@@ -9,15 +9,21 @@ function createToDoListItem() {
     let isInputValid = inputValidation(textInput.value);
     let text = textInput.value
     if (isInputValid) {
+        const item = createHTML(`
+            <li id="${generateID()}" class="list__item">
+                <div class="item__container">
+                    <input type="checkbox" class="item__checkbox">
+                    <p class="item__paragraph">${text}</p>
+                </div>
+            </li>
+        `);
+        const deleteButton = createHTML(`
+            <button class="item__delete-button">Delete</button>
+        `)
+        item.appendChild(deleteButton);
+        list.appendChild(item);
+        deleteButton.addEventListener('click', deleteListItem)
         label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
-        let listItem = createListItem();
-        let checkbox = createCheckbox();
-        let itemText = createListText(text);
-        let delteButton = createDeleteButton();
-        list.appendChild(listItem);
-        listItem.appendChild(checkbox);
-        listItem.appendChild(itemText);
-        listItem.appendChild(delteButton);
     }
     else {
         label.innerHTML = 'Write something dude.';
@@ -28,33 +34,10 @@ function generateID() {
     return listItemsCount = listItemsCount + 1;
 }
 
-function createCheckbox() {
-    let checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    return checkbox;
-}
-
-function createListItem() {
-    const className = 'list__item';
-    let element = document.createElement('li');
-    element.id = generateID();
-    element.classList.add(className);
-    return element;
-}
-
-function createListText(content) {
-    let text = document.createElement('p');
-    text.innerHTML = content;
-    return text;
-}
-
-function createDeleteButton() {
-    const className = 'item__delete-button';
-    let button = document.createElement('button');
-    button.classList.add(className);
-    button.innerHTML = 'Delete';
-    button.addEventListener('click', deleteListItem);
-    return button;
+function createHTML(html) {
+    const template = document.createElement('template');
+    template.innerHTML = html.trim();
+    return template.content.firstElementChild;
 }
 
 function inputValidation(input) {
