@@ -5,17 +5,7 @@ main {
 }
 
 input[type="checkbox"]:checked + p {
-    position: relative;
-}
-input[type="checkbox"]:checked + p::after {
-    content: "";
-    position: absolute;
-    top: 55%;
-    left: 50%;
-    transform: translate( -50%, -50% );
-    height: 0.1562rem;
-    width: calc( 100% + 1rem );
-    background: var(--secondary);
+    text-decoration: line-through;
 }
 input[type="checkbox"] {
     margin: 0;
@@ -46,7 +36,7 @@ input[type="checkbox"] {
     align-items: center;
     gap: 1rem;
     width: 100%;
-    padding: 0 4rem 0 2rem;
+    margin: 2rem 0;
 }
 .item__container {
     display: flex;
@@ -59,7 +49,6 @@ input[type="checkbox"] {
     flex-grow: 0;
 }
 .item__paragraph {
-    flex-shrink: 1;
     text-align: start;
 }
 .item__delete-button {

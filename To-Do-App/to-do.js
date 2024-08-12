@@ -24,9 +24,19 @@ function createToDoListItem() {
         list.appendChild(item);
         deleteButton.addEventListener('click', deleteListItem)
         label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
+        resetInput(textInput);
     }
     else {
         label.innerHTML = 'Write something dude.';
+    }
+}
+
+function inputValidation(input) {
+    if (input === '') {
+        return false;
+    }
+    else {
+        return true;
     }
 }
 
@@ -40,13 +50,8 @@ function createHTML(html) {
     return template.content.firstElementChild;
 }
 
-function inputValidation(input) {
-    if (input === '') {
-        return false;
-    }
-    else {
-        return true;
-    }
+function resetInput (input) {
+    input.value = '';
 }
 
 function deleteListItem(event) {
