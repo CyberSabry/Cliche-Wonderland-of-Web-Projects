@@ -4,32 +4,80 @@ const list = document.querySelector('.list');
 const label = document.querySelector('.label');
 
 let listItemsCount = 0;
+
+class Note {
+    constructor (text) {
+        this.listItem = createHTML(`
+            <li id="${generateID()}" class="list__item"></li>
+        `)
+        this.listContaier = createHTML(`
+            <div class="item__container"></div>
+        `)
+        this.checkbox = createHTML(`
+            <input type="checkbox" class="item__checkbox">
+        `)
+        this.paragraph = createHTML(`
+            <p class="item__paragraph">${text}</p>
+        `)
+        this.controlsContainer = createHTML(`
+            <div class="item__controls-container"></div>
+        `)
+        this.deleteButton = createHTML(`
+            <button class="item__delete-button">Delete</button>
+        `)
+        this.editButton = createHTML(`
+            <button class="item__edit-button">Edit</button>
+        `)
+        
+        this.listContaier.appendChild(this.checkbox);
+        this.listContaier.appendChild(this.paragraph);
+        
+        this.controlsContainer.appendChild(this.deleteButton);
+        this.controlsContainer.appendChild(this.editButton);
+
+        this.listItem.appendChild(this.listContaier);
+        this.listItem.appendChild(this.controlsContainer);
+    }
+
+    generateID() {
+        return listItemsCount = listItemsCount + 1;
+    }
+
+    getNewNote() {
+        return this.listItem;
+    }
+};
+
 // this one should be the main function that combines them all
 function createToDoListItem() {
     let isInputValid = inputValidation(textInput.value);
     let text = textInput.value
     if (isInputValid) {
-        const item = createHTML(`
-            <li id="${generateID()}" class="list__item">
-                <div class="item__container">
-                    <input type="checkbox" class="item__checkbox">
-                    <p class="item__paragraph">${text}</p>
-                </div>
-            </li>
-        `);
-        const editButton = createHTML(`
-            <button class="item__edit-button">Edit</button>    
-        `)
-        const deleteButton = createHTML(`
-            <button class="item__delete-button">Delete</button>
-        `)
-        item.appendChild(editButton)
-        item.appendChild(deleteButton);
-        list.appendChild(item);
-        editButton.addEventListener('click', editListItem)
-        deleteButton.addEventListener('click', deleteListItem)
-        label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
-        resetInput(textInput);
+        const note = new Note(text);
+
+
+        // const item = createHTML(`
+        //     <li id="${generateID()}" class="list__item">
+        //         <div class="item__container">
+        //             <input type="checkbox" class="item__checkbox">
+        //             <p class="item__paragraph">${text}</p>
+        //         </div>
+        //         <div class="item__controls-container"></div>
+        //     </li>
+        // `);
+        // const editButton = createHTML(`
+        //     <button class="item__edit-button">Edit</button>    
+        // `)
+        // const deleteButton = createHTML(`
+        //     <button class="item__delete-button">Delete</button>
+        // `)
+        // item.appendChild(editButton)
+        // item.appendChild(deleteButton);
+        list.appendChild(note);
+        // editButton.addEventListener('click', editListItem)
+        // deleteButton.addEventListener('click', deleteListItem)
+        // label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
+        // resetInput(textInput);
     }
     else {
         label.innerHTML = 'Write something dude.';
@@ -43,10 +91,6 @@ function inputValidation(input) {
     else {
         return true;
     }
-}
-
-function generateID() {
-    return listItemsCount = listItemsCount + 1;
 }
 
 function createHTML(html) {
