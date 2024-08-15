@@ -3,12 +3,12 @@ const addButton = document.querySelector('.add');
 const list = document.querySelector('.list');
 const label = document.querySelector('.label');
 
-let listItemsCount = 0;
+this.listItemsCount = 0;
 
 class Note {
     constructor (text) {
         this.listItem = createHTML(`
-            <li id="${generateID()}" class="list__item"></li>
+            <li id="${this.generateID()}" class="list__item"></li>
         `)
         this.listContaier = createHTML(`
             <div class="item__container"></div>
@@ -17,7 +17,7 @@ class Note {
             <input type="checkbox" class="item__checkbox">
         `)
         this.paragraph = createHTML(`
-            <p class="item__paragraph">${text}</p>
+            <p class="item__paragraph">${text}.</p>
         `)
         this.controlsContainer = createHTML(`
             <div class="item__controls-container"></div>
@@ -28,15 +28,17 @@ class Note {
         this.editButton = createHTML(`
             <button class="item__edit-button">Edit</button>
         `)
-        
+
         this.listContaier.appendChild(this.checkbox);
         this.listContaier.appendChild(this.paragraph);
-        
-        this.controlsContainer.appendChild(this.deleteButton);
+
         this.controlsContainer.appendChild(this.editButton);
+        this.controlsContainer.appendChild(this.deleteButton);
 
         this.listItem.appendChild(this.listContaier);
         this.listItem.appendChild(this.controlsContainer);
+
+        this.deleteButton.addEventListener('click', this.deleteNote.bind(this))
     }
 
     generateID() {
@@ -46,6 +48,10 @@ class Note {
     getNewNote() {
         return this.listItem;
     }
+
+    deleteNote() {
+        this.listItem.remove();
+    }
 };
 
 // this one should be the main function that combines them all
@@ -54,26 +60,7 @@ function createToDoListItem() {
     let text = textInput.value
     if (isInputValid) {
         const note = new Note(text);
-
-
-        // const item = createHTML(`
-        //     <li id="${generateID()}" class="list__item">
-        //         <div class="item__container">
-        //             <input type="checkbox" class="item__checkbox">
-        //             <p class="item__paragraph">${text}</p>
-        //         </div>
-        //         <div class="item__controls-container"></div>
-        //     </li>
-        // `);
-        // const editButton = createHTML(`
-        //     <button class="item__edit-button">Edit</button>    
-        // `)
-        // const deleteButton = createHTML(`
-        //     <button class="item__delete-button">Delete</button>
-        // `)
-        // item.appendChild(editButton)
-        // item.appendChild(deleteButton);
-        list.appendChild(note);
+        list.appendChild(note.getNewNote());
         // editButton.addEventListener('click', editListItem)
         // deleteButton.addEventListener('click', deleteListItem)
         // label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';

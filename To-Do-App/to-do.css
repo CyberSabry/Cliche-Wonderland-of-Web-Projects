@@ -38,6 +38,10 @@ input[type="checkbox"] {
     width: 100%;
     margin: 2rem 0;
 }
+.item__container {
+    overflow-x: scroll;
+    min-height: 50px;
+}
 .item__container,
 .item__controls-container {
     display: flex;
@@ -50,6 +54,7 @@ input[type="checkbox"] {
     flex-grow: 0;
 }
 .item__paragraph {
+    white-space: normal;
     text-align: start;
 }
 .item__delete-button {
