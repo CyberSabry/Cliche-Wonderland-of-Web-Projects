@@ -3,14 +3,14 @@ const addButton = document.querySelector('.add');
 const list = document.querySelector('.list');
 const label = document.querySelector('.label');
 
-this.listItemsCount = 0;
+listItemsCount = 0;
 
 class Note {
     constructor (text) {
         this.listItem = createHTML(`
             <li id="${this.generateID()}" class="list__item"></li>
         `)
-        this.listContaier = createHTML(`
+        this.listContainer = createHTML(`
             <div class="item__container"></div>
         `)
         this.checkbox = createHTML(`
@@ -29,16 +29,19 @@ class Note {
             <button class="item__edit-button">Edit</button>
         `)
 
-        this.listContaier.appendChild(this.checkbox);
-        this.listContaier.appendChild(this.paragraph);
+        this.listContainer.appendChild(this.checkbox);
+        this.listContainer.appendChild(this.paragraph);
 
         this.controlsContainer.appendChild(this.editButton);
         this.controlsContainer.appendChild(this.deleteButton);
 
-        this.listItem.appendChild(this.listContaier);
+        this.listItem.appendChild(this.listContainer);
         this.listItem.appendChild(this.controlsContainer);
 
+        list.appendChild(this.listItem);
+
         this.deleteButton.addEventListener('click', this.deleteNote.bind(this))
+        this.editButton.addEventListener('click', this.editNote.bind(this))
     }
 
     generateID() {
@@ -49,8 +52,33 @@ class Note {
         return this.listItem;
     }
 
+    editNote() {
+        let currentText = this.paragraph.textContent;
+        let editorInputbox = createHTML(`
+            <input type="text" value="${currentText}">
+        `)
+        this.paragraph.remove();
+        this.listContainer.appendChild(editorInputbox);
+        editorInputbox.focus();
+        editorInputbox.setSelectionRange(editorInputbox.value.length, editorInputbox.value.length);
+        editorInputbox.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter')
+            this.saveEditedNote(editorInputbox);
+        })
+    }
+
+    saveEditedNote(editorInputbox) {
+        let newText = editorInputbox.value;
+        this.paragraph = createHTML(`
+            <p class="item__paragraph">${newText}.</p>    
+        `)
+        editorInputbox.remove();
+        this.listContainer.appendChild(this.paragraph);
+    }
+
     deleteNote() {
         this.listItem.remove();
+        delete this;
     }
 };
 
@@ -60,7 +88,7 @@ function createToDoListItem() {
     let text = textInput.value
     if (isInputValid) {
         const note = new Note(text);
-        list.appendChild(note.getNewNote());
+        note.getNewNote();
         // editButton.addEventListener('click', editListItem)
         // deleteButton.addEventListener('click', deleteListItem)
         // label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
@@ -88,41 +116,6 @@ function createHTML(html) {
 
 function resetInput(input) {
     input.value = '';
-}
-
-function editListItem(event) {
-    let target = event.target;
-    let listItemID = target.parentNode.id;
-    let listItem = document.getElementById(listItemID);
-    let itemTextParagraph = listItem.getElementsByTagName('p')[0];
-    let textParagraphContent = itemTextParagraph.textContent;
-    let container = listItem.getElementsByClassName('item__container')[0];
-    console.log(container)
-    let newInput = createHTML(`
-        <input type="text" value="${textParagraphContent}">
-    `)
-    itemTextParagraph.remove();
-    container.appendChild(newInput);
-    newInput.focus();
-    newInput.setSelectionRange(newInput.value.length, newInput.value.length);
-    newInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter')
-        saveEdit(newInput);
-    })
-}
-
-function saveEdit(input) {
-    let newContent = input.value;
-    let newParagraph = createHTML(`
-        <p class="item__paragraph">${newContent}</p>
-    `);
-
-    input.replaceWith(newParagraph);
-}
-
-function deleteListItem(event) {
-    let target = event.target;
-    target.parentNode.remove();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
