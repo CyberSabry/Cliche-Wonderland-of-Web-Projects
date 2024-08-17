@@ -41,7 +41,7 @@ class Note {
         list.appendChild(this.listItem);
 
         this.deleteButton.addEventListener('click', this.deleteNote.bind(this))
-        this.editButton.addEventListener('click', this.editNote.bind(this))
+        this.editButton.addEventListener('click', this.startEditState.bind(this))
     }
 
     generateID() {
@@ -52,28 +52,44 @@ class Note {
         return this.listItem;
     }
 
-    editNote() {
-        let currentText = this.paragraph.textContent;
-        let editorInputbox = createHTML(`
+    startEditState() {
+        const currentText = this.paragraph.textContent;
+        this.editorInputbox = createHTML(`
             <input type="text" value="${currentText}">
         `)
-        this.paragraph.remove();
-        this.listContainer.appendChild(editorInputbox);
-        editorInputbox.focus();
-        editorInputbox.setSelectionRange(editorInputbox.value.length, editorInputbox.value.length);
-        editorInputbox.addEventListener('keydown', (event) => {
+        this.confirmButton = createHTML(`
+            <button>Confirm</button>    
+        `)
+        this.cancelButton = createHTML(`
+            <button>Cancel</button>    
+        `)
+        hide(this.paragraph, this.editButton, this.deleteButton);
+        this.listContainer.appendChild(this.editorInputbox);
+        appendChildren(this.controlsContainer, this.confirmButton, this.cancelButton);
+        this.editorInputbox.focus();
+        this.editorInputbox.setSelectionRange(this.editorInputbox.value.length, this.editorInputbox.value.length);
+        this.confirmButton.addEventListener('click', () => { this.saveEditedNote(); })
+        this.cancelButton.addEventListener('click', () => { this.cancelEditState(); })
+        this.editorInputbox.addEventListener('keydown', (event) => {
             if (event.key === 'Enter')
-            this.saveEditedNote(editorInputbox);
+            this.saveEditedNote();
         })
     }
 
-    saveEditedNote(editorInputbox) {
-        let newText = editorInputbox.value;
-        this.paragraph = createHTML(`
-            <p class="item__paragraph">${newText}.</p>    
-        `)
-        editorInputbox.remove();
+    cancelEditState() {
+        const oldText = this.paragraph;
+        this.paragraph.textContent = oldText;
+        remove(this.editorInputbox, this.confirmButton, this.cancelButton);
+        show(this.paragraph);
+    }
+
+    saveEditedNote() {
+        const newText = this.editorInputbox.value;
+        this.paragraph.textContent = newText;
+        remove(this.editorInputbox, this.confirmButton, this.cancelButton);
+        show(this.paragraph, this.editButton, this.deleteButton);
         this.listContainer.appendChild(this.paragraph);
+        this.editButton.removeEventListener('click', this.startEditState.bind(this))
     }
 
     deleteNote() {
@@ -81,7 +97,6 @@ class Note {
         delete this;
     }
 };
-
 // this one should be the main function that combines them all
 function createToDoListItem() {
     let isInputValid = inputValidation(textInput.value);
@@ -89,10 +104,8 @@ function createToDoListItem() {
     if (isInputValid) {
         const note = new Note(text);
         note.getNewNote();
-        // editButton.addEventListener('click', editListItem)
-        // deleteButton.addEventListener('click', deleteListItem)
-        // label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
-        // resetInput(textInput);
+        label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
+        resetInput(textInput);
     }
     else {
         label.innerHTML = 'Write something dude.';
@@ -116,6 +129,30 @@ function createHTML(html) {
 
 function resetInput(input) {
     input.value = '';
+}
+// Appends one or multiple children to one parent at once so i can do that in one line.
+function appendChildren(parent, ...children) {
+    children.forEach(child => {
+        parent.appendChild(child);
+    })
+}
+// Just makes the code look nicer and understandable.
+function hide(...elements) {
+    elements.forEach(element => {
+        element.style.display = 'none';
+    })
+}
+// Same purpose as hideElement().
+function show(...elements) {
+    elements.forEach(element => {
+        element.style.display = 'block';
+    })
+}
+// I can remove one or multiple elements in one line, better than the default js method :).
+function remove(...elements) {
+    elements.forEach(element => {
+        element.remove();
+    })
 }
 
 document.addEventListener('DOMContentLoaded', () => {
