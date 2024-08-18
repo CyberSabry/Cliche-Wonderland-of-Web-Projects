@@ -11,6 +11,10 @@ input[type="checkbox"] {
     margin: 0;
 }
 
+textarea {
+    width: 100%;
+}
+
 .text-input {
     width: 50%;
 }

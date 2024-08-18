@@ -103,6 +103,21 @@ button:active {
     border: 0.1562rem solid hsl(225, 100%, 50%);
 }
 
+textarea {
+    padding: 0.5em 1em;
+    border: 0.1562rem solid var(--secondary);
+    border-radius: 0.5rem;
+    background: var(--primery-low-opacity);
+    backdrop-filter: blur(1rem);
+}
+textarea:hover {
+    border: 0.1562rem solid hsl(200, 100%, 50%);
+}
+textarea:focus {
+    border: 0.1562rem solid hsl(225, 100%, 50%);
+    outline: none;
+}
+
 input[type="text"] {
     min-width: 20rem;
     min-height: 2.5rem;
