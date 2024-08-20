@@ -7,8 +7,10 @@ listItemsCount = 0;
 
 class Note {
     constructor (text) {
+        this.id = this.generateID();
+
         this.listItem = createHTML(`
-            <li id="${this.generateID()}" class="list__item"></li>
+            <li id="${this.id}" class="list__item"></li>
         `)
         this.listContainer = createHTML(`
             <div class="item__container"></div>
@@ -53,7 +55,7 @@ class Note {
 
         list.appendChild(this.listItem);
 
-        this.deleteButton.addEventListener('click', this.deleteNote.bind(this));
+        this.deleteButton.addEventListener('click', this.getConfirmationMassage.bind(this));
         this.editButton.addEventListener('click', this.startEditState.bind(this));
     };
 
@@ -132,18 +134,69 @@ class Note {
         }
     };
 
-    deleteNote() {
-        const popup = new ConfirmationPopup('Are you sure you want to delete this note?');
+    getConfirmationMassage() {
+        new ConfirmationPopup(this, 'Are you sure you want to delete this note?');
+    };
 
-        if (popup.checkInput()) {
-            this.listItem.remove();
-            delete this;
-        }
-        else {
-            massage.deletePopup();
-        }
+    deleteNote() {
+        this.listItem.remove();
+        delete this;
     };
 };
+
+class ConfirmationPopup {
+    constructor(note, massage) {
+        this.note = note;
+
+        this.background = createHTML(`
+            <div class="popup-background"></div>    
+        `)
+        this.popup = createHTML(`
+            <div class="popup"></div>
+        `)
+        this.massage = createHTML(`
+            <p class="popup__massage">${massage}</p>        
+        `)
+        this.buttonsContainer = createHTML(`
+            <div class="popup__controls-container"></div>     
+        `)
+        this.confirmationButton = createHTML(`
+            <button>Yes</button>
+        `)
+        this.cancelationButton = createHTML(`
+            <button>No</button>
+        `)
+
+        appendChildren(
+            this.popup,
+            [
+                this.massage,
+                this.buttonsContainer
+            ]
+        );
+        appendChildren(
+            this.buttonsContainer,
+            [
+                this.confirmationButton,
+                this.cancelationButton
+            ]
+        );
+        this.background.appendChild(this.popup);
+        document.body.appendChild(this.background);
+
+        this.confirmationButton.addEventListener('click', this.confirm.bind(this));
+        this.cancelationButton.addEventListener('click', this.deletePopup.bind(this));
+    }
+
+    confirm() {
+        this.note.deleteNote();
+        this.deletePopup();
+    }
+
+    deletePopup() {
+        remove(this.background);
+    }
+}
 // this one should be the main function that combines them all
 function createToDoListItem() {
     let isInputValid = inputValidation(textInput.value);
@@ -201,59 +254,12 @@ function remove(...elements) {
         element.remove();
     })
 }
-
+// Makes the text area resize itself depending on how much contenet it has.
 function inputResizable(input) {
     const lostPixels = 4;
     input.addEventListener('keyup', () => {
         input.style.height = (input.scrollHeight + lostPixels) + 'px';
     })
-}
-
-class ConfirmationPopup {
-    constructor(massage) {
-        this.popup = createHTML(`
-            <div class="popup"></div>
-        `)
-        this.massage = createHTML(`
-            <p class="popup__massage">${massage}</p>        
-        `)
-        this.buttonsContainer = createHTML(`
-            <div class="popup__controls-container"></div>     
-        `)
-        this.confirmationButton = createHTML(`
-            <button>Yes</button>
-        `)
-        this.cancelationButton = createHTML(`
-            <button>No</button>
-        `)
-
-        appendChildren(
-            this.popup,
-            [
-                this.massage,
-                this.buttonsContainer
-            ]
-        )
-        appendChildren(
-            this.buttonsContainer,
-            [
-                this.confirmationButton,
-                this.cancelationButton
-            ]
-        )
-
-        document.body.appendChild(this.popup);
-
-        this.confirmationButton.addEventListener('click', this.confirmInput.bind(this));
-        this.cancelationButton.addEventListener('click', this.cancelInput.bind(this));
-    }
-    // I dont know how to do this yet
-    checkInput(boolean) {
-        return boolean;
-    }
-    deletePopup() {
-        remove(this.popup);
-    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

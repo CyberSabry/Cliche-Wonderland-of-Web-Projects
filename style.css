@@ -28,7 +28,7 @@ header {
     border: 0.3125rem solid var(--secondary);
     border-radius: 1rem;
     background: var(--primery-low-opacity);
-    backdrop-filter: blur(1rem);
+    backdrop-filter: blur(0.5rem);
     z-index: 10;
 }
 header h1 {
@@ -93,7 +93,7 @@ button {
     border: 0.1562rem solid var(--secondary);
     border-radius: 0.5rem;
     background: var(--primery-low-opacity);
-    backdrop-filter: blur(1rem);
+    backdrop-filter: blur(0.5rem);
     cursor: pointer;
 }
 button:hover {
@@ -108,7 +108,7 @@ textarea {
     border: 0.1562rem solid var(--secondary);
     border-radius: 0.5rem;
     background: var(--primery-low-opacity);
-    backdrop-filter: blur(1rem);
+    backdrop-filter: blur(0.5rem);
 }
 textarea:hover {
     border: 0.1562rem solid hsl(200, 100%, 50%);
@@ -126,7 +126,7 @@ input[type="text"] {
     border: 0.1562rem solid var(--secondary);
     border-radius: 0.5rem;
     background: var(--primery-low-opacity);
-    backdrop-filter: blur(1rem);
+    backdrop-filter: blur(0.5rem);
 }
 input[type="text"]:hover {
     border: 0.1562rem solid hsl(200, 100%, 50%);
