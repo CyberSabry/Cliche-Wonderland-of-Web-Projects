@@ -20,12 +20,12 @@ textarea {
 }
 
 .container {
+    display: none;
     width: 95%;
     margin: 1rem auto;
-    padding: 1em 2em;
-}
-.container--hidden {
-    display: none;
+    padding: 1rem 2rem;
+    border: 0.1562rem solid var(--secondary);
+    border-radius: 1rem;
 }
 
 .list {
@@ -40,7 +40,10 @@ textarea {
     align-items: center;
     gap: 1rem;
     width: 100%;
-    margin: 2rem 0;
+    padding: 1rem 0;
+}
+.list__item + .list__item {
+    border-top: 0.0781rem solid var(--secondary);
 }
 .item__container {
     overflow-x: scroll;
@@ -74,6 +77,7 @@ textarea {
     height: 100%;
     background: var(--primery-low-opacity);
     backdrop-filter: blur(0.1rem);
+    z-index: 10;
 }
 .popup {
     position: absolute;
@@ -90,6 +94,7 @@ textarea {
     border-radius: 1rem;
     background: var(--primery-low-opacity);
     backdrop-filter: blur(0.5rem);
+    z-index: 11;
 }
 .popup button {
     margin: 0 0.5rem;

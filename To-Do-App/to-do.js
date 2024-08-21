@@ -1,10 +1,11 @@
 const textInput = document.querySelector('.text-input');
 const addButton = document.querySelector('.add');
+const listContainer = document.querySelector('.container');
 const list = document.querySelector('.list');
 const label = document.querySelector('.label');
 
 listItemsCount = 0;
-
+// The hole list item with all of it`s functions: edit and delete.
 class Note {
     constructor (text) {
         this.id = this.generateID();
@@ -132,6 +133,7 @@ class Note {
         else {
             this.listContainer.appendChild(this.paragraph);
         }
+        updateContainerVisibility();
     };
 
     getConfirmationMassage() {
@@ -140,10 +142,11 @@ class Note {
 
     deleteNote() {
         this.listItem.remove();
+        updateContainerVisibility();
         delete this;
     };
 };
-
+// A popup that waits for you to make your decision.
 class ConfirmationPopup {
     constructor(note, massage) {
         this.note = note;
@@ -199,34 +202,36 @@ class ConfirmationPopup {
 }
 // this one should be the main function that combines them all
 function createToDoListItem() {
-    let isInputValid = inputValidation(textInput.value);
+    let isInputEmpty = checkEmptyInput(textInput.value);
     let text = textInput.value
-    if (isInputValid) {
+
+    if (isInputEmpty) {
+        label.innerHTML = 'Write something dude.';
+    }
+    else {
         const note = new Note(text);
         note.getNewNote();
         label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
         resetInput(textInput);
-    }
-    else {
-        label.innerHTML = 'Write something dude.';
+        updateContainerVisibility();
     }
 }
-
-function inputValidation(input) {
+// Checks if the input is empty it returns true and if its not empty its false.
+function checkEmptyInput(input) {
     if (input === '') {
-        return false;
-    }
-    else {
         return true;
     }
+    else {
+        return false;
+    }
 }
-
+// Creates HTML elements just like if you were doing it in a HTML file.
 function createHTML(html) {
     const template = document.createElement('template');
     template.innerHTML = html.trim();
     return template.content.firstElementChild;
 }
-
+// Sets any input value you want to an empty string.
 function resetInput(input) {
     input.value = '';
 }
@@ -254,14 +259,24 @@ function remove(...elements) {
         element.remove();
     })
 }
+// Updates the container visibility so if we don`t have any notes inside it hides it.
+function updateContainerVisibility() {
+    if (list.children.length > 0) {
+        show(listContainer);
+    }
+    else {
+        hide(listContainer);
+    }
+}
 // Makes the text area resize itself depending on how much contenet it has.
 function inputResizable(input) {
     const lostPixels = 4;
+    input.style.height = (input.scrollHeight + lostPixels) + 'px';
     input.addEventListener('keyup', () => {
         input.style.height = (input.scrollHeight + lostPixels) + 'px';
     })
 }
-
+// Stuff happens when you first load the page!.
 document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (event) => { 
         if(event.key === '/') { 
