@@ -98,6 +98,7 @@ button {
 }
 button:hover {
     border: 0.1562rem solid hsl(200, 100%, 50%);
+    animation: popupEffect 0.1s ease forwards;
 }
 button:active {
     border: 0.1562rem solid hsl(225, 100%, 50%);
@@ -161,4 +162,15 @@ input[type="checkbox"]:hover {
 }
 input[type="checkbox"]:active {
     border: 0.1562rem solid hsl(225, 100%, 50%);
+}
+
+@keyframes popupEffect {
+    0% {
+        border-right-width: 0.1562rem; 
+        border-bottom-width: 0.1562rem; 
+    }
+    100% {
+        border-right-width: 0.3125rem; 
+        border-bottom-width: 0.3125rem; 
+    }
 }

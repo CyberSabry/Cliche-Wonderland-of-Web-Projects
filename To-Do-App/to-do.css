@@ -25,6 +25,8 @@ textarea {
     margin: 1rem auto;
     padding: 1rem 2rem;
     border: 0.1562rem solid var(--secondary);
+    border-right-width: 0.3125rem;
+    border-bottom-width: 0.3125rem;
     border-radius: 1rem;
 }
 
