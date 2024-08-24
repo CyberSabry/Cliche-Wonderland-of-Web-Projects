@@ -92,7 +92,9 @@ textarea {
     justify-content: center;
     gap: 2rem;
     padding: 2rem 3rem;
-    border: 0.3125rem solid var(--secondary);
+    border: 0.1562rem solid var(--secondary);
+    border-right-width: 0.3125rem;
+    border-bottom-width: 0.3125rem;
     border-radius: 1rem;
     background: var(--primery-low-opacity);
     backdrop-filter: blur(0.5rem);

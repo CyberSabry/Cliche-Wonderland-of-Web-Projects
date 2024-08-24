@@ -26,6 +26,8 @@ header {
     margin: 0 auto 4rem auto;
     padding: 1em;
     border: 0.3125rem solid var(--secondary);
+    border-right-width: 0.6250rem;
+    border-bottom-width: 0.6250rem;
     border-radius: 1rem;
     background: var(--primery-low-opacity);
     backdrop-filter: blur(0.5rem);
@@ -91,30 +93,36 @@ button {
     font-weight: 700;
     color: var(--secondary);
     border: 0.1562rem solid var(--secondary);
+    border-right-width: 0.3125rem;
+    border-bottom-width: 0.3125rem;
     border-radius: 0.5rem;
     background: var(--primery-low-opacity);
     backdrop-filter: blur(0.5rem);
     cursor: pointer;
 }
 button:hover {
-    border: 0.1562rem solid hsl(200, 100%, 50%);
+    color: hsl(200, 100%, 50%);
+    border-color: hsl(200, 100%, 50%);
 }
 button:active {
-    border: 0.1562rem solid hsl(225, 100%, 50%);
+    color: hsl(225, 100%, 50%);
+    border-color: hsl(225, 100%, 50%);
 }
 
 textarea {
     padding: 0.5em 1em;
     border: 0.1562rem solid var(--secondary);
+    border-right-width: 0.3125rem;
+    border-bottom-width: 0.3125rem;
     border-radius: 0.5rem;
     background: var(--primery-low-opacity);
     backdrop-filter: blur(0.5rem);
 }
 textarea:hover {
-    border: 0.1562rem solid hsl(200, 100%, 50%);
+    border-color: hsl(200, 100%, 50%);
 }
 textarea:focus {
-    border: 0.1562rem solid hsl(225, 100%, 50%);
+    border-color: hsl(225, 100%, 50%);
     outline: none;
 }
 
@@ -124,15 +132,17 @@ input[type="text"] {
     margin: 1rem 0.5rem;
     padding: 0.5em 1em;
     border: 0.1562rem solid var(--secondary);
+    border-right-width: 0.3125rem;
+    border-bottom-width: 0.3125rem;
     border-radius: 0.5rem;
     background: var(--primery-low-opacity);
     backdrop-filter: blur(0.5rem);
 }
 input[type="text"]:hover {
-    border: 0.1562rem solid hsl(200, 100%, 50%);
+    border-color: hsl(200, 100%, 50%);
 }
 input[type="text"]:focus {
-    border: 0.1562rem solid hsl(225, 100%, 50%);
+    border-color: hsl(225, 100%, 50%);
     outline: none;
 }
 
@@ -141,13 +151,16 @@ input[type="checkbox"] {
     width: 1.5rem;
     height: 1.5rem;
     border: 0.1562rem solid var(--secondary);
-    border-radius: 25rem;
+    border-right-width: 0.2125rem;
+    border-bottom-width: 0.2125rem;
+    border-radius: 0.5rem;
     background: var(--primery-low-opacity);
     backdrop-filter: blur(1rem);
     appearance: none;
+    cursor: pointer;
     -webkit-appearance: none;
 }
-input[type="checkbox"]:checked::after {
+input[type="checkbox"]:checked::before {
     content: '✔';
     position: absolute;
     top: 50%;
@@ -157,8 +170,8 @@ input[type="checkbox"]:checked::after {
     color: var(--secondary);
 }
 input[type="checkbox"]:hover {
-    border: 0.1562rem solid hsl(200, 100%, 50%);
+    border-color: hsl(200, 100%, 50%);
 }
 input[type="checkbox"]:active {
-    border: 0.1562rem solid hsl(225, 100%, 50%);
+    border-color: hsl(225, 100%, 50%);
 }
