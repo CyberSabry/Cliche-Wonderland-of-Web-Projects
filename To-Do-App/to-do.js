@@ -20,7 +20,7 @@ class Note {
             <input type="checkbox" class="item__checkbox">
         `)
         this.paragraph = createHTML(`
-            <pre class="item__paragraph">${text}.</pre>
+            <p class="item__paragraph">${text}.</p>
         `)
         this.controlsContainer = createHTML(`
             <div class="item__controls-container"></div>

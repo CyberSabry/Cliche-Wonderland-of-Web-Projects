@@ -24,9 +24,14 @@ textarea {
     width: 95%;
     margin: 1rem auto;
     padding: 1rem 2rem;
-    border: 0.1562rem solid var(--secondary);
-    border-right-width: 0.3125rem;
-    border-bottom-width: 0.3125rem;
+    border-style: var(--border-style);
+    border-color: var(--border-clr);
+    border-width: 
+        calc(var(--border-width) / 8) 
+        calc(var(--border-width) / 4) 
+        calc(var(--border-width) / 4) 
+        calc(var(--border-width) / 8)
+    ;
     border-radius: 1rem;
 }
 
@@ -92,9 +97,14 @@ textarea {
     justify-content: center;
     gap: 2rem;
     padding: 2rem 3rem;
-    border: 0.1562rem solid var(--secondary);
-    border-right-width: 0.3125rem;
-    border-bottom-width: 0.3125rem;
+    border-style: var(--border-style);
+    border-color: var(--border-clr);
+    border-width:
+        calc(var(--border-width) / 4) 
+        calc(var(--border-width) / 2) 
+        calc(var(--border-width) / 2) 
+        calc(var(--border-width) / 4)
+    ;
     border-radius: 1rem;
     background: var(--primery-low-opacity);
     backdrop-filter: blur(0.5rem);

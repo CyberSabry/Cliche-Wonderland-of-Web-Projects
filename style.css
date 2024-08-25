@@ -1,7 +1,17 @@
 :root {
-    --primery: hsl(0, 0%, 100%);
-    --primery-low-opacity: hsla(0, 0%, 100%, 0.5);
-    --secondary: hsl(0, 0%, 0%);
+    --primery-clr: hsl(0, 0%, 100%);
+    --primery-low-op-clr: hsla(0, 0%, 100%, 0.5);
+    --secondary-clr: hsl(0, 0%, 0%);
+
+    --link-clr: hsl(225, 100%, 50%);
+
+    --hover-clr: hsl(200, 100%, 50%);
+    --click-clr: hsl(225, 100%, 50%);
+    --focus-clr: hsl(225, 100%, 50%);
+
+    --border-style: solid;
+    --border-clr: hsl(0, 0%, 0%);
+    --border-width: 1rem;
 }
 html {
     font-size: 16px;
@@ -12,7 +22,7 @@ html {
     margin: 0;
 }
 body {
-    background: var(--primery);
+    background: var(--primery-clr);
 }
 
 header {
@@ -25,65 +35,81 @@ header {
     min-height: 4rem;
     margin: 0 auto 4rem auto;
     padding: 1em;
-    border: 0.3125rem solid var(--secondary);
-    border-right-width: 0.6250rem;
-    border-bottom-width: 0.6250rem;
+    border-style: var(--border-style);
+    border-color: var(--border-clr);
+    border-width: 
+        calc(var(--border-width) / 4) 
+        calc(var(--border-width) / 2) 
+        calc(var(--border-width) / 2) 
+        calc(var(--border-width) / 4)
+    ;
     border-radius: 1rem;
-    background: var(--primery-low-opacity);
+    background: var(--primery-low-op-clr);
     backdrop-filter: blur(0.5rem);
     z-index: 10;
 }
 header h1 {
     margin: 0 auto;
-    color: var(--secondary);
+    color: var(--secondary-clr);
 }
 header a {
     position: absolute;
     font-weight: 700;
-    color: var(--secondary);
+    color: var(--secondary-clr);
 }
 header a:hover {
-    color: hsl(200, 100%, 50%);
+    color: var(--hover-clr);
 }
 header a:active {
-    color: hsl(225, 100%, 50%);
+    color: var(--click-clr);
 }
 
-main {
-    width: 75%;
-    margin: 0 auto;
-}
+.blog {
+    --_breakout: minmax(0, 2rem);
+    --_right-side: minmax(0, 2fr);
+    --_left-side: minmax(0, 0.25fr);
 
-article {
-    width: 75%;
+    display: grid;
+    grid-template-columns: 0.50fr [breakout-start] 2rem [content-start] 2fr [content-end] 2rem [breakout-end] 2fr;
+    width: 100%;
     margin: 0 auto;
 }
-article h2 {
-    text-align: center;
-    margin: 3rem 0;
-    color: var(--secondary);
+.blog > * {
+    width: 100%;
+    grid-column: content;
 }
-article p {
+.blog > .breakout {
+    grid-column: breakout;
+}
+.blog h2 {
+    margin-bottom: 3rem;
+    color: var(--secondary-clr);
+}
+.blog h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--secondary-clr);
+}
+.blog p {
     margin: 1rem 0;
     font-size: 1.25rem;
-    color: var(--secondary);
+    color: var(--secondary-clr);
 }
-article a {
-    color: hsl(200, 100%, 50%);
+.blog a {
+    color: var(--link-clr);
 }
-article a:hover {
-    color: hsl(200, 100%, 70%);
+.blog a:hover {
+    color: var(--hover-clr);
 }
-article a:active {
-    color: hsl(225, 100%, 50%);
+.blog a:active {
+    color: var(--click-clr);
 }
 
 hr {
-    width: 80%;
-    height: 0.3125rem;
-    margin: 1rem auto;
+    height: 0.25rem;
+    margin: 1rem 0;
     border-radius: 1rem;
-    background: var(--secondary);
+    background: var(--secondary-clr);
 }
 
 button {
@@ -91,38 +117,48 @@ button {
     padding: 0.5em 1em;
     font-size: 1rem;
     font-weight: 700;
-    color: var(--secondary);
-    border: 0.1562rem solid var(--secondary);
-    border-right-width: 0.3125rem;
-    border-bottom-width: 0.3125rem;
+    color: var(--secondary-clr);
+    border-style: var(--border-style);
+    border-color: var(--border-clr);
+    border-width: 
+        calc(var(--border-width) / 8) 
+        calc(var(--border-width) / 4) 
+        calc(var(--border-width) / 4) 
+        calc(var(--border-width) / 8)
+    ;
     border-radius: 0.5rem;
-    background: var(--primery-low-opacity);
+    background: var(--primery-low-op-clr);
     backdrop-filter: blur(0.5rem);
     cursor: pointer;
 }
 button:hover {
-    color: hsl(200, 100%, 50%);
-    border-color: hsl(200, 100%, 50%);
+    color: var(--hover-clr);
+    border-color: var(--hover-clr);
 }
 button:active {
-    color: hsl(225, 100%, 50%);
-    border-color: hsl(225, 100%, 50%);
+    color: var(--click-clr);
+    border-color: var(--click-clr);
 }
 
 textarea {
     padding: 0.5em 1em;
-    border: 0.1562rem solid var(--secondary);
-    border-right-width: 0.3125rem;
-    border-bottom-width: 0.3125rem;
+    border-style: var(--border-style);
+    border-color: var(--border-clr);
+    border-width: 
+        calc(var(--border-width) / 8) 
+        calc(var(--border-width) / 4) 
+        calc(var(--border-width) / 4) 
+        calc(var(--border-width) / 8)
+    ;
     border-radius: 0.5rem;
-    background: var(--primery-low-opacity);
+    background: var(--primery-low-op-clr);
     backdrop-filter: blur(0.5rem);
 }
 textarea:hover {
-    border-color: hsl(200, 100%, 50%);
+    border-color: var(--hover-clr);
 }
 textarea:focus {
-    border-color: hsl(225, 100%, 50%);
+    border-color: var(--click-clr);
     outline: none;
 }
 
@@ -131,18 +167,23 @@ input[type="text"] {
     min-height: 2.5rem;
     margin: 1rem 0.5rem;
     padding: 0.5em 1em;
-    border: 0.1562rem solid var(--secondary);
-    border-right-width: 0.3125rem;
-    border-bottom-width: 0.3125rem;
+    border-style: var(--border-style);
+    border-color: var(--border-clr);
+    border-width: 
+        calc(var(--border-width) / 8) 
+        calc(var(--border-width) / 4) 
+        calc(var(--border-width) / 4) 
+        calc(var(--border-width) / 8)
+    ;
     border-radius: 0.5rem;
-    background: var(--primery-low-opacity);
+    background: var(--primery-low-op-clr);
     backdrop-filter: blur(0.5rem);
 }
 input[type="text"]:hover {
-    border-color: hsl(200, 100%, 50%);
+    border-color: var(--hover-clr);
 }
 input[type="text"]:focus {
-    border-color: hsl(225, 100%, 50%);
+    border-color: var(--click-clr);
     outline: none;
 }
 
@@ -150,11 +191,16 @@ input[type="checkbox"] {
     position: relative;
     width: 1.5rem;
     height: 1.5rem;
-    border: 0.1562rem solid var(--secondary);
-    border-right-width: 0.2125rem;
-    border-bottom-width: 0.2125rem;
+    border-style: var(--border-style);
+    border-color: var(--border-clr);
+    border-width: 
+        calc(var(--border-width) / 8) 
+        calc(var(--border-width) / 5) 
+        calc(var(--border-width) / 5) 
+        calc(var(--border-width) / 8)
+    ;
     border-radius: 0.5rem;
-    background: var(--primery-low-opacity);
+    background: var(--primery-low-op-clr);
     backdrop-filter: blur(1rem);
     appearance: none;
     cursor: pointer;
@@ -167,11 +213,13 @@ input[type="checkbox"]:checked::before {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 1rem;
-    color: var(--secondary);
+    color: var(--secondary-clr);
 }
 input[type="checkbox"]:hover {
-    border-color: hsl(200, 100%, 50%);
+    content: var(--hover-clr);
+    border-color: var(--hover-clr);
 }
 input[type="checkbox"]:active {
-    border-color: hsl(225, 100%, 50%);
+    color: var(--click-clr);
+    border-color: var(--click-clr);
 }
