@@ -225,6 +225,19 @@ function checkEmptyInput(input) {
         return false;
     }
 }
+createTxtFile(`
+    hey i'm a text yay
+    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consequuntur laudantium asperiores ex error quas praesentium assumenda facere id tempora a repellat earum eligendi tempore atque dicta molestiae veritatis doloribus deserunt vitae aut natus esse, vel ullam. Voluptatibus rerum, eaque tempore doloremque tenetur sapiente quos. Ad enim voluptatem error voluptates vel modi, incidunt possimus nihil doloribus voluptate perferendis quas aliquid? Molestiae repellendus voluptates et impedit accusamus saepe, iusto temporibus? Iusto corporis enim vero dolores facere voluptate inventore? Animi repellendus sequi rem placeat cupiditate a ab, fugit tempora fuga commodi et nobis laborum dolores veniam repellat assumenda sint dolor ducimus. Modi, dolorum.    
+`)
+function createTxtFile(text) {
+    const button = document.querySelector('.download');
+    const blob = new Blob([text], {type: 'text/plain'});
+
+    const url = URL.createObjectURL(blob);
+    button.href = url;
+    button.download = 'wow you have a file!.txt';
+
+}
 // Creates HTML elements just like if you were doing it in a HTML file.
 function createHTML(html) {
     const template = document.createElement('template');
