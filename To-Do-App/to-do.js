@@ -199,7 +199,7 @@ class ConfirmationPopup {
     deletePopup() {
         remove(this.background);
     }
-}
+};
 // this one should be the main function that combines them all
 function createToDoListItem() {
     let isInputEmpty = checkEmptyInput(textInput.value);
@@ -215,7 +215,7 @@ function createToDoListItem() {
         resetInput(textInput);
         updateContainerVisibility();
     }
-}
+};
 // Checks if the input is empty it returns true and if its not empty its false.
 function checkEmptyInput(input) {
     if (input === '') {
@@ -224,54 +224,54 @@ function checkEmptyInput(input) {
     else {
         return false;
     }
-}
-createTxtFile(`
-    hey i'm a text yay
-    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consequuntur laudantium asperiores ex error quas praesentium assumenda facere id tempora a repellat earum eligendi tempore atque dicta molestiae veritatis doloribus deserunt vitae aut natus esse, vel ullam. Voluptatibus rerum, eaque tempore doloremque tenetur sapiente quos. Ad enim voluptatem error voluptates vel modi, incidunt possimus nihil doloribus voluptate perferendis quas aliquid? Molestiae repellendus voluptates et impedit accusamus saepe, iusto temporibus? Iusto corporis enim vero dolores facere voluptate inventore? Animi repellendus sequi rem placeat cupiditate a ab, fugit tempora fuga commodi et nobis laborum dolores veniam repellat assumenda sint dolor ducimus. Modi, dolorum.    
-`)
-function createTxtFile(text) {
-    const button = document.querySelector('.download');
-    const blob = new Blob([text], {type: 'text/plain'});
+};
+// createTxtFile(`
+//     hey i'm a text yay
+//     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consequuntur laudantium asperiores ex error quas praesentium assumenda facere id tempora a repellat earum eligendi tempore atque dicta molestiae veritatis doloribus deserunt vitae aut natus esse, vel ullam. Voluptatibus rerum, eaque tempore doloremque tenetur sapiente quos. Ad enim voluptatem error voluptates vel modi, incidunt possimus nihil doloribus voluptate perferendis quas aliquid? Molestiae repellendus voluptates et impedit accusamus saepe, iusto temporibus? Iusto corporis enim vero dolores facere voluptate inventore? Animi repellendus sequi rem placeat cupiditate a ab, fugit tempora fuga commodi et nobis laborum dolores veniam repellat assumenda sint dolor ducimus. Modi, dolorum.    
+// `)
+// function createTxtFile(text) {
+//     const button = document.querySelector('.download');
+//     const blob = new Blob([text], {type: 'text/plain'});
 
-    const url = URL.createObjectURL(blob);
-    button.href = url;
-    button.download = 'wow you have a file!.txt';
+//     const url = URL.createObjectURL(blob);
+//     button.href = url;
+//     button.download = 'wow you have a file!.txt';
 
-}
+// }
 // Creates HTML elements just like if you were doing it in a HTML file.
 function createHTML(html) {
     const template = document.createElement('template');
     template.innerHTML = html.trim();
     return template.content.firstElementChild;
-}
+};
 // Sets any input value you want to an empty string.
 function resetInput(input) {
     input.value = '';
-}
+};
 // Appends one or multiple children to one parent at once so i can do that in one line.
 function appendChildren(parent, children) {
     children.forEach(child => {
         parent.appendChild(child);
     })
-}
+};
 // Just makes the code look nicer and understandable.
 function hide(...elements) {
     elements.forEach(element => {
         element.style.display = 'none';
     })
-}
+};
 // Same purpose as hideElement().
 function show(...elements) {
     elements.forEach(element => {
         element.style.display = 'block';
     })
-}
+};
 // I can remove one or multiple elements in one line, better than the default js method :).
 function remove(...elements) {
     elements.forEach(element => {
         element.remove();
     })
-}
+};
 // Updates the container visibility so if we don`t have any notes inside it hides it.
 function updateContainerVisibility() {
     if (list.children.length > 0) {
@@ -280,13 +280,24 @@ function updateContainerVisibility() {
     else {
         hide(listContainer);
     }
-}
+};
 // Makes the text area resize itself depending on how much contenet it has.
 function inputResizable(input) {
-    const lostPixels = 4;
-    input.style.height = (input.scrollHeight + lostPixels) + 'px';
-    input.addEventListener('keyup', () => {
-        input.style.height = (input.scrollHeight + lostPixels) + 'px';
+    const span = createHTML(`
+        <span></span>    
+    `)
+    input.appendChild(span);
+    //span.style.visibility = 'hidden';
+    span.style.background = 'green';
+    const style = window.getComputedStyle(input);
+    span.width = style.width;
+    span.style.font = style.font;
+    span.style.fontSize = style.fontSize;
+    span.style.whiteSpace = 'pre';
+
+    input.addEventListener('keydown', () => {
+        span.textContent = input.value;
+        input.style.height = span.offsetHeight + 'px';
     })
 }
 // Stuff happens when you first load the page!.
@@ -297,6 +308,6 @@ document.addEventListener('DOMContentLoaded', () => {
             textInput.focus();
         };
     });
-    textInput.addEventListener('keydown', (event) => { if(event.key === 'Enter') { createToDoListItem(); } });
+    // textInput.addEventListener('keydown', (event) => { if(event.key === 'Enter') { createToDoListItem(); } });
     addButton.addEventListener('click', createToDoListItem);
-})
+});
