@@ -13,49 +13,28 @@ class Note {
         this.listItem = createHTML(`
             <li id="${this.id}" class="list__item"></li>
         `)
-        this.listContainer = createHTML(`
-            <div class="item__container"></div>
-        `)
         this.checkbox = createHTML(`
             <input type="checkbox" class="item__checkbox">
         `)
         this.paragraph = createHTML(`
             <p class="item__paragraph">${text}.</p>
         `)
-        this.controlsContainer = createHTML(`
-            <div class="item__controls-container"></div>
-        `)
         this.deleteButton = createHTML(`
-            <button class="item__delete-button">Delete</button>
+            <button class="item__button item__button--delete">Delete</button>
         `)
         this.editButton = createHTML(`
-            <button class="item__edit-button">Edit</button>
+            <button class="item__button item__button--edit">Edit</button>
         `)
-
         appendChildren(
-            this.listContainer,
+            this.listItem,
             [
                 this.checkbox,
-                this.paragraph
-            ]
-        );
-        appendChildren(
-            this.controlsContainer,
-            [
+                this.paragraph,
                 this.editButton,
                 this.deleteButton
             ]
         );
-        appendChildren(
-            this.listItem,
-            [
-                this.listContainer,
-                this.controlsContainer
-            ]
-        );
-
         list.appendChild(this.listItem);
-
         this.deleteButton.addEventListener('click', this.getConfirmationMassage.bind(this));
         this.editButton.addEventListener('click', this.startEditState.bind(this));
     };
@@ -84,10 +63,10 @@ class Note {
             this.editButton, 
             this.deleteButton
         );
-        this.listContainer.appendChild(this.editorInputbox);
         appendChildren(
-            this.controlsContainer,
+            this.listItem,
             [
+                this.editorInputbox,
                 this.confirmButton,
                 this.cancelButton
             ]
@@ -283,21 +262,8 @@ function updateContainerVisibility() {
 };
 // Makes the text area resize itself depending on how much contenet it has.
 function inputResizable(input) {
-    const span = createHTML(`
-        <span></span>    
-    `)
-    input.appendChild(span);
-    //span.style.visibility = 'hidden';
-    span.style.background = 'green';
-    const style = window.getComputedStyle(input);
-    span.width = style.width;
-    span.style.font = style.font;
-    span.style.fontSize = style.fontSize;
-    span.style.whiteSpace = 'pre';
-
-    input.addEventListener('keydown', () => {
-        span.textContent = input.value;
-        input.style.height = span.offsetHeight + 'px';
+    input.addEventListener('input', () => {
+        input.style.height = input.scrollHeight + 'px';
     })
 }
 // Stuff happens when you first load the page!.
@@ -308,6 +274,6 @@ document.addEventListener('DOMContentLoaded', () => {
             textInput.focus();
         };
     });
-    // textInput.addEventListener('keydown', (event) => { if(event.key === 'Enter') { createToDoListItem(); } });
+    textInput.addEventListener('keydown', (event) => { if(event.key === 'Enter') { createToDoListItem(); } });
     addButton.addEventListener('click', createToDoListItem);
 });

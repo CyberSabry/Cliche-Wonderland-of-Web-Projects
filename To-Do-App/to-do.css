@@ -13,7 +13,7 @@ input[type="checkbox"] {
 
 textarea {
     resize: none;
-    overflow: hidden;
+    overflow-y: auto;
     transition: 100ms ease;
 }
 
@@ -45,39 +45,37 @@ textarea {
 }
 
 .list__item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 0.25fr [content-start] 5fr [content-end] 0.50fr 0.50fr;
     width: 100%;
     padding: 1rem 0;
 }
 .list__item + .list__item {
     border-top: 0.0781rem solid var(--secondary);
 }
+
 .item__container {
-    overflow-x: scroll;
-    min-height: 50px;
-}
-.item__container,
-.item__controls-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 0.25fr [content-start] 5fr [content-end] 0.50fr 0.50fr;
 }
 .item__checkbox {
-    flex-shrink: 0;
-    flex-grow: 0;
+    justify-self: center;
+    align-self: center;
 }
 .item__paragraph {
-    white-space: pre;
+    max-width: 100%;
+    grid-column: content;
+    align-self: center;
     text-align: start;
+    padding: 0 0.50rem;
 }
-.item__delete-button {
-    flex-shrink: 0;
-    flex-grow: 0;
+.item__button {
+    justify-self: center;
+    align-self: center;
 }
+
 
 .popup-background {
     position: fixed;
