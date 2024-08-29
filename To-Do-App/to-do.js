@@ -53,10 +53,10 @@ class Note {
             <textarea type="text">${currentText}</textarea>
         `);
         this.confirmButton = createHTML(`
-            <button>Confirm</button>    
+            <button class="item__button">Confirm</button>    
         `);
         this.cancelButton = createHTML(`
-            <button>Cancel</button>    
+            <button class="item__button">Cancel</button>    
         `);
         hide(
             this.paragraph,
