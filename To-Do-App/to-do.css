@@ -52,7 +52,7 @@ textarea {
     padding: 1rem 0;
 }
 .list__item + .list__item {
-    border-top: 0.0781rem solid var(--secondary);
+    border-top: 0.0781rem solid var(--secondary-clr);
 }
 
 .item__container {
@@ -72,6 +72,7 @@ textarea {
     padding: 0 0.50rem;
 }
 .item__button {
+    max-height: 3rem;
     justify-self: center;
     align-self: center;
 }
