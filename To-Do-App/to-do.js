@@ -1,5 +1,6 @@
 const textInput = document.querySelector('.text-input');
-const addButton = document.querySelector('.add');
+const addButton = document.querySelector('.add-button');
+const downloadButton = document.querySelector('.download-button');
 const listContainer = document.querySelector('.container');
 const list = document.querySelector('.list');
 const label = document.querySelector('.label');
@@ -53,10 +54,10 @@ class Note {
             <textarea type="text">${currentText}</textarea>
         `);
         this.confirmButton = createHTML(`
-            <button class="item__button">Confirm</button>    
+            <button class="item__button item__button--confirm">Confirm</button>    
         `);
         this.cancelButton = createHTML(`
-            <button class="item__button">Cancel</button>    
+            <button class="item__button item__button--cancel">Cancel</button>    
         `);
         hide(
             this.paragraph,
@@ -73,7 +74,6 @@ class Note {
         );
         this.editorInputbox.focus();
         this.editorInputbox.setSelectionRange(this.editorInputbox.value.length, this.editorInputbox.value.length);
-        inputResizable(this.editorInputbox);
         this.confirmButton.addEventListener('click', () => { this.saveEditedNote(); })
         this.cancelButton.addEventListener('click', () => { this.cancelEditState(); })
     };
@@ -109,10 +109,7 @@ class Note {
         if (newText === '') {
             this.deleteNote();
         }
-        else {
-            this.listContainer.appendChild(this.paragraph);
-        }
-        updateContainerVisibility();
+        updateUI();
     };
 
     getConfirmationMassage() {
@@ -121,7 +118,7 @@ class Note {
 
     deleteNote() {
         this.listItem.remove();
-        updateContainerVisibility();
+        updateUI();
         delete this;
     };
 };
@@ -192,7 +189,7 @@ function createToDoListItem() {
         note.getNewNote();
         label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
         resetInput(textInput);
-        updateContainerVisibility();
+        updateUI();
     }
 };
 // Checks if the input is empty it returns true and if its not empty its false.
@@ -236,13 +233,15 @@ function appendChildren(parent, children) {
 // Just makes the code look nicer and understandable.
 function hide(...elements) {
     elements.forEach(element => {
-        element.style.display = 'none';
+        const className = element.classList[0];
+        element.classList.add(className + '--hidden');
     })
 };
 // Same purpose as hideElement().
 function show(...elements) {
     elements.forEach(element => {
-        element.style.display = 'block';
+        const className = element.classList[0];
+        element.classList.remove(className + '--hidden');
     })
 };
 // I can remove one or multiple elements in one line, better than the default js method :).
@@ -252,20 +251,18 @@ function remove(...elements) {
     })
 };
 // Updates the container visibility so if we don`t have any notes inside it hides it.
-function updateContainerVisibility() {
+function updateUI() {
     if (list.children.length > 0) {
-        show(listContainer);
+        show(listContainer,
+            downloadButton
+        );
     }
     else {
-        hide(listContainer);
+        hide(listContainer,
+            downloadButton
+        );
     }
 };
-// Makes the text area resize itself depending on how much contenet it has.
-function inputResizable(input) {
-    input.addEventListener('input', () => {
-        input.style.height = input.scrollHeight + 'px';
-    })
-}
 // Stuff happens when you first load the page!.
 document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (event) => { 
