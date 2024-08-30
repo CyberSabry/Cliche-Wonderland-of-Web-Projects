@@ -12,8 +12,8 @@ input[type="checkbox"] {
 }
 
 textarea {
+    height: 20rem;
     resize: none;
-    overflow-y: auto;
     transition: 100ms ease;
 }
 
@@ -21,8 +21,11 @@ textarea {
     width: 50%;
 }
 
-.container {
+.download-button--hidden {
     display: none;
+}
+
+.container {
     width: 95%;
     max-width: 80rem;
     margin: 1rem auto;
@@ -36,6 +39,9 @@ textarea {
         calc(var(--border-width) / 8)
     ;
     border-radius: 1rem;
+}
+.container--hidden {
+    display: none;
 }
 
 .list {
@@ -65,18 +71,27 @@ textarea {
     align-self: center;
 }
 .item__paragraph {
-    max-width: 100%;
+    width: 100%;
     grid-column: content;
     align-self: center;
     text-align: start;
-    padding: 0 0.50rem;
+    padding: 0 0.50rem 0rem 0.50rem;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-all;
 }
+.item__paragraph--hidden {
+    display: none;
+}
+
 .item__button {
     max-height: 3rem;
     justify-self: center;
     align-self: center;
 }
-
+.item__button--hidden {
+    display: none;
+}
 
 .popup-background {
     position: fixed;
