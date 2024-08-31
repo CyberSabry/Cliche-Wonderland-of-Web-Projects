@@ -49,7 +49,10 @@ header {
     z-index: 10;
 }
 header h1 {
-    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, -50% );
     color: var(--secondary-clr);
 }
 header a {
@@ -62,6 +65,9 @@ header a:hover {
 }
 header a:active {
     color: var(--click-clr);
+}
+header .toggle-theme-button {
+    margin-left: auto;
 }
 
 .blog {
