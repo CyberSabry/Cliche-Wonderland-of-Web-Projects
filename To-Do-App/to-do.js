@@ -1,6 +1,7 @@
 const textInput = document.querySelector('.text-input');
 const addButton = document.querySelector('.add-button');
 const downloadButton = document.querySelector('.download-button');
+const downloadButtonAnchor = document.querySelector('.download-button__anchor')
 const listContainer = document.querySelector('.container');
 const list = document.querySelector('.list');
 const label = document.querySelector('.label');
@@ -201,19 +202,20 @@ function checkEmptyInput(input) {
         return false;
     }
 };
-// createTxtFile(`
-//     hey i'm a text yay
-//     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consequuntur laudantium asperiores ex error quas praesentium assumenda facere id tempora a repellat earum eligendi tempore atque dicta molestiae veritatis doloribus deserunt vitae aut natus esse, vel ullam. Voluptatibus rerum, eaque tempore doloremque tenetur sapiente quos. Ad enim voluptatem error voluptates vel modi, incidunt possimus nihil doloribus voluptate perferendis quas aliquid? Molestiae repellendus voluptates et impedit accusamus saepe, iusto temporibus? Iusto corporis enim vero dolores facere voluptate inventore? Animi repellendus sequi rem placeat cupiditate a ab, fugit tempora fuga commodi et nobis laborum dolores veniam repellat assumenda sint dolor ducimus. Modi, dolorum.    
-// `)
-// function createTxtFile(text) {
-//     const button = document.querySelector('.download');
-//     const blob = new Blob([text], {type: 'text/plain'});
-
-//     const url = URL.createObjectURL(blob);
-//     button.href = url;
-//     button.download = 'wow you have a file!.txt';
-
-// }
+// Takes all the added notes and puts them in a (txt) file that you download on your computer.
+function createTxtFile() {
+    const allText = document.querySelectorAll('.container .item__paragraph');
+    let allTextCombined = '';
+    allText.forEach(text => {
+        let content = text.textContent;
+        content += '\n\n\n\n';
+        allTextCombined += content;
+    })
+    const blob = new Blob([allTextCombined], {type: 'text/plain'});
+    const url = URL.createObjectURL(blob);
+    downloadButtonAnchor.href = url;
+    downloadButtonAnchor.download = 'To-Do.txt';
+};
 // Creates HTML elements just like if you were doing it in a HTML file.
 function createHTML(html) {
     const template = document.createElement('template');
@@ -273,4 +275,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     textInput.addEventListener('keydown', (event) => { if(event.key === 'Enter') { createToDoListItem(); } });
     addButton.addEventListener('click', createToDoListItem);
+    downloadButton.addEventListener('click', createTxtFile);
 });

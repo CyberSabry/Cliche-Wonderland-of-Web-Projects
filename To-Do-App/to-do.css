@@ -24,6 +24,13 @@ textarea {
 .download-button--hidden {
     display: none;
 }
+.download-button__anchor {
+    text-decoration: none;
+    color: var(--secondary-clr);
+}
+button:hover .download-button__anchor {
+    color: var(--hover-clr)
+}
 
 .container {
     width: 95%;
@@ -33,10 +40,10 @@ textarea {
     border-style: var(--border-style);
     border-color: var(--border-clr);
     border-width: 
-        calc(var(--border-width) / 8) 
         calc(var(--border-width) / 4) 
-        calc(var(--border-width) / 4) 
-        calc(var(--border-width) / 8)
+        calc(var(--border-width) / 2) 
+        calc(var(--border-width) / 2) 
+        calc(var(--border-width) / 4)
     ;
     border-radius: 1rem;
 }
