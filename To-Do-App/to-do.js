@@ -216,6 +216,7 @@ function createTxtFile() {
     downloadButtonAnchor.href = url;
     downloadButtonAnchor.download = 'To-Do.txt';
 };
+// Utility functions:
 // Creates HTML elements just like if you were doing it in a HTML file.
 function createHTML(html) {
     const template = document.createElement('template');
