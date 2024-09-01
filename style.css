@@ -66,7 +66,7 @@ header a:hover {
 header a:active {
     color: var(--click-clr);
 }
-header .toggle-theme-button {
+header .toggle-color-mode-button {
     margin-left: auto;
 }
 

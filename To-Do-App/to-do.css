@@ -13,12 +13,19 @@ input[type="checkbox"] {
 
 textarea {
     height: 20rem;
+    margin: 0 1rem;
     resize: none;
     transition: 100ms ease;
+    color: var(--secondary-clr);
+}
+
+.label {
+    color: var(--secondary-clr);
 }
 
 .text-input {
     width: 50%;
+    color: var(--secondary-clr);
 }
 
 .download-button--hidden {
@@ -46,6 +53,7 @@ button:hover .download-button__anchor {
         calc(var(--border-width) / 4)
     ;
     border-radius: 1rem;
+    color: var(--secondary-clr)
 }
 .container--hidden {
     display: none;
@@ -132,6 +140,7 @@ button:hover .download-button__anchor {
     border-radius: 1rem;
     background: var(--primery-low-opacity);
     backdrop-filter: blur(0.5rem);
+    color: var(--secondary-clr);
     z-index: 11;
 }
 .popup button {
