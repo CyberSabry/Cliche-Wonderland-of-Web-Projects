@@ -274,7 +274,6 @@ document.addEventListener('DOMContentLoaded', () => {
             textInput.focus();
         };
     });
-    textInput.addEventListener('keydown', (event) => { if(event.key === 'Enter') { createToDoListItem(); } });
-    addButton.addEventListener('click', createToDoListItem);
-    downloadButton.addEventListener('click', createTxtFile);
+    textInput.addEventListener('keydown', (event) => { if(event.key === 'Enter') { createToDoListItem(); createTxtFile(); } });
+    addButton.addEventListener('click', () => { createToDoListItem(); createTxtFile();});
 });
