@@ -1,0 +1,58 @@
+.header {
+  position: sticky;
+  top: 1rem;
+  left: 0;
+  display: flex;
+  align-items: center;
+  width: 90%;
+  min-height: 4rem;
+  margin-inline: auto;
+  margin-block: 1rem 2rem;
+  padding: 1em;
+  border-style: var(--border-style);
+  border-color: var(--border-clr);
+  border-width: 
+    calc( var(--border-width) / 4 ) 
+    calc( var(--border-width) / 2 ) 
+    calc( var(--border-width) / 2 ) 
+    calc( var(--border-width) / 4 )
+  ;
+  border-radius: 1rem;
+  background: var(--primery-low-op-clr);
+  backdrop-filter: blur(0.5rem);
+  z-index: 10;
+}
+.h1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate( -50%, -50% );
+  color: var(--secondary-clr);
+}
+.colorModeButton {
+  margin-left: auto;
+  padding: 0.5em 1em;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--secondary-clr);
+  border-style: var(--border-style);
+  border-color: var(--border-clr);
+  border-width: 
+    calc( var(--border-width) / 8 ) 
+    calc( var(--border-width) / 4 ) 
+    calc( var(--border-width) / 4 ) 
+    calc( var(--border-width) / 8 )
+  ;
+  border-radius: 0.5rem;
+  background: var(--primery-low-op-clr);
+  backdrop-filter: blur(0.5rem);
+  cursor: pointer;
+}
+.colorModeButton:hover {
+  color: var(--hover-clr);
+  border-color: var(--hover-clr);
+}
+.colorModeButton:active {
+  color: var(--click-clr);
+  border-color: var(--click-clr);
+}

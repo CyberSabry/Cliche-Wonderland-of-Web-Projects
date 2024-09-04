@@ -1,4 +1,4 @@
-:root {
+/* :root {
     --primery-clr: hsl(0, 0%, 100%);
     --primery-low-op-clr: hsla(0, 0%, 100%, 0.5);
     --secondary-clr: hsl(0, 0%, 0%);
@@ -12,7 +12,7 @@
     --border-style: solid;
     --border-clr: hsl(0, 0%, 0%);
     --border-width: 1rem;
-}
+} */
 html {
     font-size: 16px;
 }
@@ -25,7 +25,7 @@ body {
     background: var(--primery-clr);
 }
 
-header {
+/* header {
     position: sticky;
     top: 1rem;
     left: 0;
@@ -54,7 +54,7 @@ header h1 {
     left: 50%;
     transform: translate( -50%, -50% );
     color: var(--secondary-clr);
-}
+} */
 header a {
     position: absolute;
     font-weight: 700;
