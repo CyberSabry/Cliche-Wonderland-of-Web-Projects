@@ -1,0 +1,1 @@
+const addButton = document.querySelector('.make-note-button');

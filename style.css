@@ -27,14 +27,14 @@ body {
 
 header {
     position: sticky;
-    top: 1rem;
+    top: 0;
     left: 0;
     display: flex;
     align-items: center;
     width: 90%;
     min-height: 4rem;
-    margin: 0 auto 4rem auto;
-    padding: 1em;
+    margin: 1rem auto 4rem auto;
+    padding: 1em 2em;
     border-style: var(--border-style);
     border-color: var(--border-clr);
     border-width: 
