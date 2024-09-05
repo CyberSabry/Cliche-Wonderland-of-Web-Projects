@@ -1,3 +1,41 @@
+// Utility functions:
+// Creates HTML elements just like if you were doing it in a HTML file.
+function createHTML(html) {
+    const template = document.createElement('template');
+    template.innerHTML = html.trim();
+    return template.content.firstElementChild;
+};
+// Sets any input value you want to an empty string.
+function resetInput(input) {
+    input.value = '';
+};
+// Appends one or multiple children to one parent at once so i can do that in one line.
+function appendChildren(parent, children) {
+    children.forEach(child => {
+        parent.appendChild(child);
+    })
+};
+// Just makes the code look nicer and understandable.
+function hide(...elements) {
+    elements.forEach(element => {
+        const className = element.classList[0];
+        element.classList.add(className + '--hidden');
+    })
+};
+// Same purpose as hideElement().
+function show(...elements) {
+    elements.forEach(element => {
+        const className = element.classList[0];
+        element.classList.remove(className + '--hidden');
+    })
+};
+// I can remove one or multiple elements in one line, better than the default js method :).
+function remove(...elements) {
+    elements.forEach(element => {
+        element.remove();
+    })
+};
+
 const colorToggleButton = document.querySelector('.toggle-color-mode-button');
 
 let isDarkMode;
@@ -78,3 +116,5 @@ document.addEventListener('DOMContentLoaded', () => {
     setUp();
     colorToggleButton.addEventListener('click', switchThemes);
 });
+
+export default { createHTML, resetInput, appendChildren, hide, show, remove };

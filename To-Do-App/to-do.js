@@ -1,3 +1,5 @@
+import Utility from "../main.js";
+
 const textInput = document.querySelector('.text-input');
 const addButton = document.querySelector('.add-button');
 const downloadButton = document.querySelector('.download-button');
@@ -6,28 +8,28 @@ const listContainer = document.querySelector('.container');
 const list = document.querySelector('.list');
 const label = document.querySelector('.label');
 
-listItemsCount = 0;
+let listItemsCount = 0;
 // The hole list item with all of it`s functions: edit and delete.
 class Note {
     constructor (text) {
         this.id = this.generateID();
 
-        this.listItem = createHTML(`
+        this.listItem = Utility.createHTML(`
             <li id="${this.id}" class="list__item"></li>
         `)
-        this.checkbox = createHTML(`
+        this.checkbox = Utility.createHTML(`
             <input type="checkbox" class="item__checkbox">
         `)
-        this.paragraph = createHTML(`
+        this.paragraph = Utility.createHTML(`
             <p class="item__paragraph">${text}.</p>
         `)
-        this.deleteButton = createHTML(`
+        this.deleteButton = Utility.createHTML(`
             <button class="item__button item__button--delete">Delete</button>
         `)
-        this.editButton = createHTML(`
+        this.editButton = Utility.createHTML(`
             <button class="item__button item__button--edit">Edit</button>
         `)
-        appendChildren(
+        Utility.appendChildren(
             this.listItem,
             [
                 this.checkbox,
@@ -51,21 +53,21 @@ class Note {
 
     startEditState() {
         const currentText = this.paragraph.textContent.trim();
-        this.editorInputbox = createHTML(`
+        this.editorInputbox = Utility.createHTML(`
             <textarea type="text">${currentText}</textarea>
         `);
-        this.confirmButton = createHTML(`
+        this.confirmButton = Utility.createHTML(`
             <button class="item__button item__button--confirm">Confirm</button>    
         `);
-        this.cancelButton = createHTML(`
+        this.cancelButton = Utility.createHTML(`
             <button class="item__button item__button--cancel">Cancel</button>    
         `);
-        hide(
+        Utility.hide(
             this.paragraph,
             this.editButton, 
             this.deleteButton
         );
-        appendChildren(
+        Utility.appendChildren(
             this.listItem,
             [
                 this.editorInputbox,
@@ -82,12 +84,12 @@ class Note {
     cancelEditState() {
         const oldText = this.paragraph.textContent;
         this.paragraph.textContent = oldText;
-        remove(
+        Utility.remove(
             this.editorInputbox, 
             this.confirmButton, 
             this.cancelButton
         );
-        show(
+        Utility.show(
             this.paragraph, 
             this.editButton, 
             this.deleteButton
@@ -97,12 +99,12 @@ class Note {
     saveEditedNote() {
         const newText = this.editorInputbox.value.trim();
         this.paragraph.textContent = newText;
-        remove(
+        Utility.remove(
             this.editorInputbox, 
             this.confirmButton, 
             this.cancelButton
         );
-        show(
+        Utility.show(
             this.paragraph,
             this.editButton, 
             this.deleteButton
@@ -128,33 +130,33 @@ class ConfirmationPopup {
     constructor(note, massage) {
         this.note = note;
 
-        this.background = createHTML(`
+        this.background = Utility.createHTML(`
             <div class="popup-background"></div>    
         `)
-        this.popup = createHTML(`
+        this.popup = Utility.createHTML(`
             <div class="popup"></div>
         `)
-        this.massage = createHTML(`
+        this.massage = Utility.createHTML(`
             <p class="popup__massage">${massage}</p>        
         `)
-        this.buttonsContainer = createHTML(`
+        this.buttonsContainer = Utility.createHTML(`
             <div class="popup__controls-container"></div>     
         `)
-        this.confirmationButton = createHTML(`
+        this.confirmationButton = Utility.createHTML(`
             <button>Yes</button>
         `)
-        this.cancelationButton = createHTML(`
+        this.cancelationButton = Utility.createHTML(`
             <button>No</button>
         `)
 
-        appendChildren(
+        Utility.appendChildren(
             this.popup,
             [
                 this.massage,
                 this.buttonsContainer
             ]
         );
-        appendChildren(
+        Utility.appendChildren(
             this.buttonsContainer,
             [
                 this.confirmationButton,
@@ -174,7 +176,7 @@ class ConfirmationPopup {
     }
 
     deletePopup() {
-        remove(this.background);
+        Utility.remove(this.background);
     }
 };
 // this one should be the main function that combines them all
@@ -189,7 +191,7 @@ function createToDoListItem() {
         const note = new Note(text);
         note.getNewNote();
         label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
-        resetInput(textInput);
+        Utility.resetInput(textInput);
         updateUI();
     }
 };
@@ -216,52 +218,15 @@ function createTxtFile() {
     downloadButtonAnchor.href = url;
     downloadButtonAnchor.download = 'To-Do.txt';
 };
-// Utility functions:
-// Creates HTML elements just like if you were doing it in a HTML file.
-function createHTML(html) {
-    const template = document.createElement('template');
-    template.innerHTML = html.trim();
-    return template.content.firstElementChild;
-};
-// Sets any input value you want to an empty string.
-function resetInput(input) {
-    input.value = '';
-};
-// Appends one or multiple children to one parent at once so i can do that in one line.
-function appendChildren(parent, children) {
-    children.forEach(child => {
-        parent.appendChild(child);
-    })
-};
-// Just makes the code look nicer and understandable.
-function hide(...elements) {
-    elements.forEach(element => {
-        const className = element.classList[0];
-        element.classList.add(className + '--hidden');
-    })
-};
-// Same purpose as hideElement().
-function show(...elements) {
-    elements.forEach(element => {
-        const className = element.classList[0];
-        element.classList.remove(className + '--hidden');
-    })
-};
-// I can remove one or multiple elements in one line, better than the default js method :).
-function remove(...elements) {
-    elements.forEach(element => {
-        element.remove();
-    })
-};
 // Updates the container visibility so if we don`t have any notes inside it hides it.
 function updateUI() {
     if (list.children.length > 0) {
-        show(listContainer,
+        Utility.show(listContainer,
             downloadButton
         );
     }
     else {
-        hide(listContainer,
+        Utility.hide(listContainer,
             downloadButton
         );
     }
