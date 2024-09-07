@@ -69,7 +69,7 @@ const darkMode = {
     hover: 'hsl(200, 100%, 40%)',
     click: 'hsl(225, 100%, 30%)',
     focus: 'hsl(225, 100%, 30%)',
-    border: 'hsl(0, 0%, 60%)'
+    border: 'hsl(0, 0%, 40%)'
 };
 // Applies all the values of a theme object to all CSS variables, careful the order of values matters.
 function setTheme(theme) {
