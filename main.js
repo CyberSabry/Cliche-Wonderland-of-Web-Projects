@@ -75,9 +75,9 @@ const darkMode = {
 function setTheme(theme) {
     const values = Object.values(theme);
     const root = document.documentElement;
-    for ( let i = 0; i < CSSColorVariables.length; i++ ) {
-        root.style.setProperty(CSSColorVariables[i], values[i]);
-    }
+    // for ( let i = 0; i < CSSColorVariables.length; i++ ) {
+    //     root.style.setProperty(CSSColorVariables[i], values[i]);
+    // }
 };
 // When we first load the page it checks the user's device prefrence and set the theme according to that...
 // ...and then changes the text content of the switching button.
