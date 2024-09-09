@@ -6,22 +6,14 @@
   width: 95%;
   margin: 0 auto;
   padding: 1em 2em;
-  background: var(--primery-low-op-clr);
 }
 
 .note {
   max-width: 25rem;
-  border-style: var(--border-style);
-  border-color: var(--border-clr);
-  border-width: 
-      calc(var(--border-width) / 8) 
-      calc(var(--border-width) / 4) 
-      calc(var(--border-width) / 4) 
-      calc(var(--border-width) / 8)
-  ;
-  border-radius: 1rem;
-  color: var(--secondary-clr);
-  background: var(--primery-low-op-clr);
+  padding: 0.5em 1em;
+  border-radius: 0.25rem;
+  color: var(--font-clr);
+  background: var(--bg-dark-clr);
 }
 .note__toolbar {
   display: flex;
@@ -30,10 +22,19 @@
   width: 100%;
   max-height: 4rem;
   padding: 0.5em 1em;
-  border-style: var(--border-style);
-  border-color: var(--border-clr);
-  border-width: 0 0 calc(var(--border-width) / 10) 0;
+  border-bottom: 1px solid var(--hr-clr);
 }
+
+.toolbar__title {
+  color: var(--sub-hdr-font-clr);
+}
+
+.toolbar__btns-box {
+  display: flex;
+  place-items: center;
+  gap: 0.5rem;
+}
+
 .note__content-box {
   padding: 0.5em 1em;
 }

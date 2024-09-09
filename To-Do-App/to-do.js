@@ -7,8 +7,13 @@ const downloadButtonAnchor = document.querySelector('.download-button__anchor')
 const listContainer = document.querySelector('.container');
 const list = document.querySelector('.list');
 const label = document.querySelector('.label');
-
+// Just so we can make unique id for each to-do task.
 let listItemsCount = 0;
+// Popups can see if user have a popup already on.
+let isDeletePopupOpen = false;
+// For managing not having more than one edit process at once.
+let isEditStateOn = false;
+let currentEditState = null;
 // The hole list item with all of it`s functions: edit and delete.
 class Note {
   constructor (text) {
@@ -49,6 +54,12 @@ class Note {
   };
 
   startEditState() {
+    if(isEditStateOn) {
+      currentEditState.cancelEditState();
+    }
+    isEditStateOn = true;
+    currentEditState = this;
+
     const currentText = this.paragraph.textContent.trim();
     this.editorInputbox = Utility.createHTML(`
       <textarea type="text">${currentText}</textarea>
@@ -76,6 +87,9 @@ class Note {
   };
 
   cancelEditState() {
+    isEditStateOn = false;
+    currentEditState = null;
+
     const oldText = this.paragraph.textContent;
     this.paragraph.textContent = oldText;
     Utility.remove(
@@ -91,6 +105,9 @@ class Note {
   };
 
   saveEditedNote() {
+    isEditStateOn = false;
+    currentEditState = null;
+
     const newText = this.editorInputbox.value.trim();
     this.paragraph.textContent = newText;
     Utility.remove(
@@ -122,6 +139,10 @@ class Note {
 // A popup that waits for you to make your decision.
 class ConfirmationPopup {
   constructor(note, massage) {
+    if(isDeletePopupOpen) {
+      return;
+    }
+    isDeletePopupOpen = true;
     this.note = note;
 
     this.background = Utility.createHTML(`
@@ -160,11 +181,14 @@ class ConfirmationPopup {
 
   confirm() {
     this.note.deleteNote();
+    isDeletePopupOpen = false;
     this.deletePopup();
   }
 
   deletePopup() {
+    isDeletePopupOpen = false;
     Utility.remove(this.background);
+    delete this;
   }
 };
 // this one should be the main function that combines them all

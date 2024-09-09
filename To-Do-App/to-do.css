@@ -46,7 +46,7 @@ textarea {
 	padding: 1rem 2rem;
 	border-radius: 0.25rem;
 	color: var(--font-clr);
-	background: var(--bg-dark-clr-low-op);
+	background: var(--bg-dark-clr);
 }
 .container--hidden {
 	display: none;
