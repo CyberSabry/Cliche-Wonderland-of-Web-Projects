@@ -34,6 +34,19 @@
   place-items: center;
   gap: 0.5rem;
 }
+.btns-box__btn--options-menu-btn {
+  display: flex;
+  place-items: center;
+  padding: 0.25em 0.50em;
+}
+.btns-box__btn--options-menu-btn__icon {
+  width: 16px;
+  height: 16px;
+}
+
+.btns-box__btn--hidden {
+  display: none;
+}
 
 .note__content-box {
   padding: 0.5em 1em;

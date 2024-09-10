@@ -60,8 +60,8 @@ textarea {
 
 .list__item {
 	width: 100%;
-	display: grid;
-	grid-template-columns: 0.25fr [content-start] 5fr [content-end] 0.50fr 0.50fr;
+	display: flex;
+	place-items: center;
 	width: 100%;
 	padding: 1rem 0;
 }
@@ -75,27 +75,36 @@ textarea {
 	grid-template-columns: 0.25fr [content-start] 5fr [content-end] 0.50fr 0.50fr;
 }
 .item__checkbox {
-	justify-self: center;
-	align-self: center;
+	flex-shrink: 0;
+}
+.item__checkbox--hidden {
+	display: none;
 }
 .item__paragraph {
 	width: 100%;
-	grid-column: content;
-	align-self: center;
 	text-align: start;
-	padding: 0 0.50rem 0rem 0.50rem;
+	margin-inline: 0 0.50rem;
+	padding: 0.50em 1em;
+	border-radius: 0.25rem;
 	overflow-wrap: break-word;
 	word-wrap: break-word;
 	word-break: break-all;
 }
+.item__paragraph:focus {
+	box-shadow: var(--hover-outline);
+	outline: none;
+}
 .item__paragraph--hidden {
 	display: none;
 }
+.item__paragraph--edit-state {
+	background: var(--ui-interactive-bg-clr-low-op);
+}
+
 
 .item__button {
 	max-height: 3rem;
-	justify-self: center;
-	align-self: center;
+	margin-inline: 0.25rem;
 }
 .item__button--hidden {
 	display: none;
@@ -107,7 +116,7 @@ textarea {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: var(--bg-dark-clr-low-op);
+	background: hsla(0, 0%, 0%, 0.1);
 	backdrop-filter: blur(0.1rem);
 	z-index: 10;
 }

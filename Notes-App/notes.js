@@ -68,11 +68,18 @@ class Note {
     this.BtnsBox = Utility.createHTML(`
       <div class="toolbar__btns-box"></div>
     `);
+    this.optionsMenuBtn = Utility.createHTML(`
+      <button class="btns-box__btn btns-box__btn--options-menu-btn">
+        <svg class="btns-box__btn--options-menu-btn__icon">
+          <use href="#more-options" />
+        </svg>
+      </button>  
+    `)
     this.editBtn = Utility.createHTML(`
-      <button class="btns-box__btn btns-box__btn--edit">Edit</button>
+      <button class="btns-box__btn btns-box__btn--edit btns-box__btn--hidden">Edit</button>
     `);
     this.deleteBtn = Utility.createHTML(`
-      <button class="btns-box__btn btns-box__btn--delete">Delete</button>
+      <button class="btns-box__btn btns-box__btn--delete btns-box__btn--hidden">Delete</button>
     `);
     this.contentBox = Utility.createHTML(`
       <div class="note__content-box"></div>
@@ -86,6 +93,7 @@ class Note {
       this.BtnsBox
     ])
     Utility.appendChildren(this.BtnsBox, [
+        this.optionsMenuBtn,
         this.editBtn,
         this.deleteBtn
     ]);

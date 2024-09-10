@@ -35,6 +35,17 @@ function remove(...elements) {
         element.remove();
     })
 };
+// Moves the cursor to the end of editable text element.
+function placeCursorAtEnd(element) {
+    let range = document.createRange();
+    let selection = window.getSelection();
+
+    range.selectNodeContents(element);
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
+}
+
 
 const colorToggleButton = document.querySelector('.toggle-color-mode-button');
 
@@ -117,4 +128,4 @@ document.addEventListener('DOMContentLoaded', () => {
     colorToggleButton.addEventListener('click', switchThemes);
 });
 
-export default { createHTML, resetInput, appendChildren, hide, show, remove };
+export default { createHTML, resetInput, appendChildren, hide, show, remove, placeCursorAtEnd };

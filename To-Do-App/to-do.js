@@ -14,10 +14,15 @@ let isDeletePopupOpen = false;
 // For managing not having more than one edit process at once.
 let isEditStateOn = false;
 let currentEditState = null;
-// The hole list item with all of it`s functions: edit and delete.
+// All notes stored in one array.
+let allNotes = [];
+// The whole list item with all of it`s functions: edit and delete.
 class Note {
   constructor (text) {
+    this.content = text;
     this.id = this.generateID();
+    this.isChecked = false;
+    this.isEditable = false;
 
     this.listItem = Utility.createHTML(`
       <li id="${this.id}" class="list__item"></li>
@@ -26,7 +31,7 @@ class Note {
       <input type="checkbox" class="item__checkbox">
     `)
     this.paragraph = Utility.createHTML(`
-      <p class="item__paragraph">${text}.</p>
+      <p class="item__paragraph">${this.content}.</p>
     `)
     this.deleteButton = Utility.createHTML(`
       <button class="item__button item__button--delete">Delete</button>
@@ -34,6 +39,8 @@ class Note {
     this.editButton = Utility.createHTML(`
       <button class="item__button item__button--edit">Edit</button>
     `)
+
+    this.paragraph.setAttribute('contenteditable', this.isEditable);
     Utility.appendChildren(this.listItem, [
       this.checkbox,
       this.paragraph,
@@ -41,29 +48,43 @@ class Note {
       this.deleteButton
     ]);
     list.appendChild(this.listItem);
+    allNotes.push(this);
+    console.log(allNotes);
+    this.checkbox.addEventListener('click', this.setAsChecked.bind(this));
     this.deleteButton.addEventListener('click', this.getConfirmationMassage.bind(this));
     this.editButton.addEventListener('click', this.startEditState.bind(this));
   };
 
   generateID() {
-    return listItemsCount = listItemsCount + 1;
+    return allNotes.length;
   };
 
   getNewNote() {
     return this.listItem;
   };
 
+  setAsChecked() {
+    if(!this.isChecked) {
+      this.isChecked = true;
+      Utility.hide(this.editButton);
+    }
+    else {
+      this.isChecked = false;
+      Utility.show(this.editButton);
+    }
+  }
   startEditState() {
     if(isEditStateOn) {
-      currentEditState.cancelEditState();
+      const currentNoteOldText = currentEditState.content;
+
+      currentEditState.cancelEditState(currentNoteOldText);
     }
     isEditStateOn = true;
     currentEditState = this;
-
-    const currentText = this.paragraph.textContent.trim();
-    this.editorInputbox = Utility.createHTML(`
-      <textarea type="text">${currentText}</textarea>
-    `);
+    this.isEditable = true;
+    this.paragraph.classList.add('item__paragraph--edit-state');
+    this.paragraph.setAttribute('contenteditable', this.isEditable);
+    Utility.placeCursorAtEnd(this.paragraph);
     this.confirmButton = Utility.createHTML(`
       <button class="item__button item__button--confirm">Confirm</button>    
     `);
@@ -71,17 +92,15 @@ class Note {
       <button class="item__button item__button--cancel">Cancel</button>    
     `);
     Utility.hide(
-      this.paragraph,
+      this.checkbox,
       this.editButton, 
       this.deleteButton
     );
     Utility.appendChildren(this.listItem, [
-      this.editorInputbox,
       this.confirmButton,
       this.cancelButton
     ]);
-    this.editorInputbox.focus();
-    this.editorInputbox.setSelectionRange(this.editorInputbox.value.length, this.editorInputbox.value.length);
+    this.paragraph.focus();
     this.confirmButton.addEventListener('click', () => { this.saveEditedNote(); })
     this.cancelButton.addEventListener('click', () => { this.cancelEditState(); })
   };
@@ -89,16 +108,16 @@ class Note {
   cancelEditState() {
     isEditStateOn = false;
     currentEditState = null;
-
-    const oldText = this.paragraph.textContent;
-    this.paragraph.textContent = oldText;
+    this.isEditable = false;
+    this.paragraph.classList.remove('item__paragraph--edit-state');
+    this.paragraph.setAttribute('contenteditable', this.isEditable);
+    this.paragraph.textContent = this.content;
     Utility.remove(
-      this.editorInputbox, 
       this.confirmButton, 
       this.cancelButton
     );
     Utility.show(
-      this.paragraph, 
+      this.checkbox,
       this.editButton, 
       this.deleteButton
     );
@@ -107,16 +126,18 @@ class Note {
   saveEditedNote() {
     isEditStateOn = false;
     currentEditState = null;
-
-    const newText = this.editorInputbox.value.trim();
-    this.paragraph.textContent = newText;
+    this.isEditable = false;
+    this.paragraph.classList.remove('item__paragraph--edit-state');
+    this.paragraph.setAttribute('contenteditable', this.isEditable);
+    const newText = this.paragraph.textContent.trim();
+    this.content = newText;
+    this.paragraph.textContent = this.content;
     Utility.remove(
-      this.editorInputbox, 
       this.confirmButton, 
       this.cancelButton
     );
     Utility.show(
-      this.paragraph,
+      this.checkbox,
       this.editButton, 
       this.deleteButton
     );
@@ -132,6 +153,7 @@ class Note {
 
   deleteNote() {
     this.listItem.remove();
+    allNotes.splice(this.id, 1);
     updateUI();
     delete this;
   };
@@ -191,6 +213,65 @@ class ConfirmationPopup {
     delete this;
   }
 };
+// Download manager popup.
+class DownloadManager {
+  constructor() {
+
+    this.textContent = '';
+    allNotes.forEach(note => {
+      if(note.isChecked) {
+        this.textContent += `{-Checked-} => ${note.content} \n\n\n`;
+      }
+      else {
+        this.textContent += `${note.content} \n\n\n`;
+      }
+    })
+    
+    this.downloadManager = Utility.createHTML(`
+      <div class="download-manager"></div>  
+    `);
+    this.title = Utility.createHTML(`
+      <h2 class="download-manager__title">Download</h2>  
+    `);
+    this.content = Utility.createHTML(`
+      <pre class="download-manager__content" contenteditable="true">${this.textContent}</pre>
+    `);
+    this.dialogBox = Utility.createHTML(`
+      <div class="download-manager__dialog-box"></div>  
+    `);
+    this.downloadBtn = Utility.createHTML(`
+      <button class="dialog-box__btn dialog-box__btn--download"></button>  
+    `);
+    this.anchor = Utility.createHTML(`
+      <a class="dialog-box__btn--download__anchor">Download</a>  
+    `)
+    this.cancelBtn = Utility.createHTML(`
+      <button class="dialog-box__btn dialog-box__btn--cancel">Cancel</button>  
+    `);
+
+    Utility.appendChildren(this.downloadManager, [
+      this.title,
+      this.content,
+      this.dialogBox
+    ]);
+    Utility.appendChildren(this.dialogBox, [
+      this.downloadBtn,
+      this.cancelBtn
+    ]);
+    this.downloadBtn.appendChild(this.anchor);
+    document.body.appendChild(this.downloadManager);
+
+    // need to continue from here...
+  }
+  // Takes all the added notes and puts them in a (txt) file that you download on your computer.
+  createTxtFile(textContent) {
+    const blob = new Blob([textContent], {type: 'text/plain'});
+    const url = URL.createObjectURL(blob);
+
+    this.anchor.href = url;
+    this.downloadBtn = 'To-Do.txt';
+  };
+};
 // this one should be the main function that combines them all
 function createToDoListItem() {
   let isInputEmpty = checkEmptyInput(textInput.value);
@@ -215,20 +296,6 @@ function checkEmptyInput(input) {
   else {
     return false;
   }
-};
-// Takes all the added notes and puts them in a (txt) file that you download on your computer.
-function createTxtFile() {
-  const allText = document.querySelectorAll('.container .item__paragraph');
-  let allTextCombined = '';
-  allText.forEach(text => {
-    let content = text.textContent;
-    content += '\n\n\n\n';
-    allTextCombined += content;
-  })
-  const blob = new Blob([allTextCombined], {type: 'text/plain'});
-  const url = URL.createObjectURL(blob);
-  downloadButtonAnchor.href = url;
-  downloadButtonAnchor.download = 'To-Do.txt';
 };
 // Updates the container visibility so if we don`t have any notes inside it hides it.
 function updateUI() {
@@ -255,4 +322,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   textInput.addEventListener('keydown', (event) => { if(event.key === 'Enter') { createToDoListItem(); createTxtFile(); } });
   addButton.addEventListener('click', () => { createToDoListItem(); createTxtFile();});
+  document.querySelector('#test').addEventListener('click', () => { new DownloadManager })
 });
