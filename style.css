@@ -80,11 +80,9 @@ header a {
   position: absolute;
   font-weight: 700;
   color: var(--font-clr);
-}
-header a:hover {
+} header a:hover {
   color: var(--link-hover-clr);
-}
-header a:active {
+} header a:active {
   color: var(--link-click-clr);
 }
 header .toggle-color-mode-button {
@@ -124,11 +122,9 @@ header .toggle-color-mode-button {
 }
 .blog a {
   color: var(--link-clr);
-}
-.blog a:hover {
+} .blog a:hover {
   color: var(--link-hover-clr);
-}
-.blog a:active {
+} .blog a:active {
   color: var(--link-click-clr);
 }
 
@@ -149,15 +145,12 @@ button {
   background: var(--ui-interactive-bg-clr-low-op);
   backdrop-filter: blur(0.5rem);
   cursor: pointer;
-}
-button:hover {
+} button:hover {
   background: var(--hover-clr);
-}
-button:focus {
+} button:focus {
   box-shadow: var(--hover-outline);
   outline: none;
-}
-button:active {
+} button:active {
   background: var(--click-clr);
 }
 
@@ -168,8 +161,7 @@ textarea {
   color: var(--font-clr);
   background: var(--ui-interactive-bg-clr-low-op);
   backdrop-filter: blur(0.5rem);
-}
-textarea:focus {
+} textarea:focus {
   box-shadow: var(--hover-outline);
   outline: none;
 }
@@ -184,8 +176,7 @@ input[type="text"] {
   color: var(--font-clr);
   background: var(--ui-interactive-bg-clr-low-op);
   backdrop-filter: blur(0.5rem);
-}
-input[type="text"]:focus {
+} input[type="text"]:focus {
   box-shadow: var(--hover-outline);
   outline: none;
 }
@@ -201,8 +192,7 @@ input[type="checkbox"] {
   appearance: none;
   cursor: pointer;
   -webkit-appearance: none;
-}
-input[type="checkbox"]:checked::before {
+} input[type="checkbox"]:checked::before {
   content: '✔';
   position: absolute;
   top: 50%;
@@ -210,15 +200,12 @@ input[type="checkbox"]:checked::before {
   transform: translate(-50%, -50%);
   font-size: 1rem;
   color: var(--font-clr);
-}
-input[type="checkbox"]:hover {
+} input[type="checkbox"]:hover {
   background: var(--hover-clr);
-}
-input[type="checkbox"]:focus {
+} input[type="checkbox"]:focus {
   box-shadow: var(--hover-outline);
   outline: none;
-}
-input[type="checkbox"]:active {
+} input[type="checkbox"]:active {
   background: var(--click-clr);
 }
 

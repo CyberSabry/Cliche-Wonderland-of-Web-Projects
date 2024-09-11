@@ -218,6 +218,7 @@ class DownloadManager {
   constructor() {
 
     this.textContent = '';
+
     allNotes.forEach(note => {
       if(note.isChecked) {
         this.textContent += `{-Checked-} => ${note.content} \n\n\n`;
@@ -233,6 +234,9 @@ class DownloadManager {
     this.title = Utility.createHTML(`
       <h2 class="download-manager__title">Download</h2>  
     `);
+    this.fileName = Utility.createHTML(`
+      <p class="download-manager__file-name" contenteditable="true">To-Do</p>  
+    `)
     this.content = Utility.createHTML(`
       <pre class="download-manager__content" contenteditable="true">${this.textContent}</pre>
     `);
@@ -240,17 +244,15 @@ class DownloadManager {
       <div class="download-manager__dialog-box"></div>  
     `);
     this.downloadBtn = Utility.createHTML(`
-      <button class="dialog-box__btn dialog-box__btn--download"></button>  
+      <a class="dialog-box__btn dialog-box__btn--download">Download</a>  
     `);
-    this.anchor = Utility.createHTML(`
-      <a class="dialog-box__btn--download__anchor">Download</a>  
-    `)
     this.cancelBtn = Utility.createHTML(`
       <button class="dialog-box__btn dialog-box__btn--cancel">Cancel</button>  
     `);
 
     Utility.appendChildren(this.downloadManager, [
       this.title,
+      this.fileName,
       this.content,
       this.dialogBox
     ]);
@@ -258,18 +260,24 @@ class DownloadManager {
       this.downloadBtn,
       this.cancelBtn
     ]);
-    this.downloadBtn.appendChild(this.anchor);
     document.body.appendChild(this.downloadManager);
 
-    // need to continue from here...
+    this.downloadBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      this.createTxtFile(this.textContent)
+    });
   }
   // Takes all the added notes and puts them in a (txt) file that you download on your computer.
   createTxtFile(textContent) {
-    const blob = new Blob([textContent], {type: 'text/plain'});
-    const url = URL.createObjectURL(blob);
-
-    this.anchor.href = url;
-    this.downloadBtn = 'To-Do.txt';
+    let fileName = this.fileName.textContent.trim();
+    
+      const blob = new Blob([textContent], {type: 'text/plain'});
+      const url = URL.createObjectURL(blob);
+      this.downloadBtn.href = url;
+      this.downloadBtn.download = fileName + '.txt';
+      URL.revokeObjectURL(url);
+      console.log(fileName)
+      console.log('download should be triggerd')
   };
 };
 // this one should be the main function that combines them all
@@ -320,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
       textInput.focus();
     };
   });
-  textInput.addEventListener('keydown', (event) => { if(event.key === 'Enter') { createToDoListItem(); createTxtFile(); } });
-  addButton.addEventListener('click', () => { createToDoListItem(); createTxtFile();});
+  textInput.addEventListener('keydown', (event) => { if(event.key === 'Enter') { createToDoListItem(); /*createTxtFile();*/ } });
+  addButton.addEventListener('click', () => { createToDoListItem(); /*createTxtFile();*/});
   document.querySelector('#test').addEventListener('click', () => { new DownloadManager })
 });
