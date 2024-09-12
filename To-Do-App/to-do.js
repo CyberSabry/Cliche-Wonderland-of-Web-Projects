@@ -221,10 +221,10 @@ class DownloadManager {
 
     allNotes.forEach(note => {
       if(note.isChecked) {
-        this.textContent += `{-Checked-} => ${note.content} \n\n\n`;
+        this.textContent += `{-Checked-} => ${note.content} \n-\n`;
       }
       else {
-        this.textContent += `${note.content} \n\n\n`;
+        this.textContent += `${note.content} \n-\n`;
       }
     })
     

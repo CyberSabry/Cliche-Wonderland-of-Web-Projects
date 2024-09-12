@@ -99,7 +99,7 @@ textarea {
 }
 .item__paragraph--edit-state {
 	background: var(--ui-interactive-bg-clr-low-op);
-  backdrop-filter: blur(0.5rem);
+  backdrop-filter: blur(1rem);
 }
 
 
@@ -127,7 +127,7 @@ textarea {
 	border-radius: 0.25rem;
 	color: var(--font-clr);
 	background: var(--bg-dark-clr-low-op);
-  backdrop-filter: blur(0.5rem);
+  backdrop-filter: blur(1rem);
 } 
 .download-manager__title {
 	padding: 0.50rem 1rem;
@@ -137,20 +137,28 @@ textarea {
 	padding: 0.50rem 1rem;
 	border-radius: 0.25rem;
 	background: var(--ui-interactive-bg-clr-low-op);
-  backdrop-filter: blur(0.5rem);
+  backdrop-filter: blur(1rem);
 	overflow-wrap: break-word;
 	word-wrap: break-word;
 	word-break: break-all;
-} 
+} .download-manager__file-name:focus {
+	box-shadow: var(--hover-outline);
+	outline: none;
+}
 .download-manager__content {
-	max-width: 100%;
+	width: 100%;
+	max-height: 500px;
+	padding: 0.50rem 1rem;
 	border-radius: 0.25rem;
 	background: var(--ui-interactive-bg-clr-low-op);
-  backdrop-filter: blur(0.5rem);
+  backdrop-filter: blur(1rem);
 	overflow-wrap: break-word;
 	word-wrap: break-word;
-	word-break: break-all;
-} 
+	overflow: auto;
+} .download-manager__content:focus {
+	box-shadow: var(--hover-outline);
+	outline: none;
+}
 .download-manager__dialog-box {
 	width: 100%;
 	display: flex;
@@ -165,7 +173,7 @@ textarea {
   border: none;
   border-radius: 0.25rem;
   background: var(--ui-interactive-bg-clr-low-op);
-  backdrop-filter: blur(0.5rem);
+  backdrop-filter: blur(1rem);
   cursor: pointer;
 } .dialog-box__btn--download:hover {
   background: var(--hover-clr);
@@ -202,7 +210,7 @@ textarea {
 	padding: 2rem 3rem;
 	border-radius: 0.25rem;
 	background: var(--bg-dark-clr-low-op);
-	backdrop-filter: blur(0.5rem);
+	backdrop-filter: blur(1rem);
 	color: var(--font-clr);
 	z-index: 11;
 }
