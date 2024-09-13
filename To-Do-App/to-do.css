@@ -99,9 +99,8 @@ textarea {
 }
 .item__paragraph--edit-state {
 	background: var(--ui-interactive-bg-clr-low-op);
-  backdrop-filter: blur(1rem);
+  backdrop-filter: blur(3rem);
 }
-
 
 .item__button {
 	max-height: 3rem;
@@ -111,11 +110,21 @@ textarea {
 	display: none;
 }
 
-.download-manager {
+.download-manager-background {
 	position: fixed;
 	top: 50%;
 	left: 50%;
 	transform: translate( -50%, -50% );
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	background: var(--bg-dark-clr-low-op);
+	backdrop-filter: blur(0.1rem);
+	z-index: 10;
+}
+.download-manager {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -127,17 +136,16 @@ textarea {
 	border-radius: 0.25rem;
 	color: var(--font-clr);
 	background: var(--bg-dark-clr-low-op);
-  backdrop-filter: blur(1rem);
+  backdrop-filter: blur(3rem);
 } 
 .download-manager__title {
-	padding: 0.50rem 1rem;
 	color: var(--sub-hdr-font-clr);
 } 
 .download-manager__file-name {
 	padding: 0.50rem 1rem;
 	border-radius: 0.25rem;
 	background: var(--ui-interactive-bg-clr-low-op);
-  backdrop-filter: blur(1rem);
+  backdrop-filter: blur(3rem);
 	overflow-wrap: break-word;
 	word-wrap: break-word;
 	word-break: break-all;
@@ -151,9 +159,10 @@ textarea {
 	padding: 0.50rem 1rem;
 	border-radius: 0.25rem;
 	background: var(--ui-interactive-bg-clr-low-op);
-  backdrop-filter: blur(1rem);
+  	backdrop-filter: blur(3rem);
 	overflow-wrap: break-word;
 	word-wrap: break-word;
+	white-space: pre-wrap;
 	overflow: auto;
 } .download-manager__content:focus {
 	box-shadow: var(--hover-outline);
@@ -173,7 +182,7 @@ textarea {
   border: none;
   border-radius: 0.25rem;
   background: var(--ui-interactive-bg-clr-low-op);
-  backdrop-filter: blur(1rem);
+  backdrop-filter: blur(3rem);
   cursor: pointer;
 } .dialog-box__btn--download:hover {
   background: var(--hover-clr);
@@ -193,7 +202,7 @@ textarea {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: hsla(0, 0%, 0%, 0.1);
+	background: var(--bg-dark-clr-low-op);
 	backdrop-filter: blur(0.1rem);
 	z-index: 10;
 }
@@ -210,7 +219,7 @@ textarea {
 	padding: 2rem 3rem;
 	border-radius: 0.25rem;
 	background: var(--bg-dark-clr-low-op);
-	backdrop-filter: blur(1rem);
+	backdrop-filter: blur(3rem);
 	color: var(--font-clr);
 	z-index: 11;
 }

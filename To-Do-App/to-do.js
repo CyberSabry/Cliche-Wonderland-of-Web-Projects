@@ -7,61 +7,67 @@ const downloadButtonAnchor = document.querySelector('.download-button__anchor')
 const listContainer = document.querySelector('.container');
 const list = document.querySelector('.list');
 const label = document.querySelector('.label');
-// Just so we can make unique id for each to-do task.
-let listItemsCount = 0;
-// Popups can see if user have a popup already on.
-let isDeletePopupOpen = false;
-// For managing not having more than one edit process at once.
-let isEditStateOn = false;
-let currentEditState = null;
-// All notes stored in one array.
-let allNotes = [];
-// The whole list item with all of it`s functions: edit and delete.
-class Note {
+
+// State management.
+const state = {
+  isDeletePopupOpen: false,
+  isEditStateOn: false,
+  currentEditState: null,
+  allNotes: []
+}
+
+class Task {
   constructor (text) {
     this.content = text;
     this.id = this.generateID();
     this.isChecked = false;
     this.isEditable = false;
 
-    this.listItem = Utility.createHTML(`
-      <li id="${this.id}" class="list__item"></li>
-    `)
-    this.checkbox = Utility.createHTML(`
-      <input type="checkbox" class="item__checkbox">
-    `)
-    this.paragraph = Utility.createHTML(`
-      <p class="item__paragraph">${this.content}.</p>
-    `)
-    this.deleteButton = Utility.createHTML(`
-      <button class="item__button item__button--delete">Delete</button>
-    `)
-    this.editButton = Utility.createHTML(`
-      <button class="item__button item__button--edit">Edit</button>
-    `)
+    this.createElements();
+    this.appendElements();
+    this.createEventListeners();
+
+
+
+
 
     this.paragraph.setAttribute('contenteditable', this.isEditable);
-    Utility.appendChildren(this.listItem, [
+
+    list.appendChild(this.task);
+    state.allNotes.push(this);
+  };
+
+  createElements() {
+    this.task = Utility.createHTML(`<li id="${this.id}" class="list__item"></li>`)
+    this.checkbox = Utility.createHTML(`<input type="checkbox" class="item__checkbox">`)
+    this.paragraph = Utility.createHTML(`<p class="item__paragraph">${this.content}.</p>`)
+    this.deleteButton = Utility.createHTML(`<button class="item__button item__button--delete">Delete</button>`)
+    this.editButton = Utility.createHTML(`<button class="item__button item__button--edit">Edit</button>`)
+  }
+
+  appendElements() {
+    Utility.appendChildren(this.task, [
       this.checkbox,
       this.paragraph,
       this.editButton,
       this.deleteButton
     ]);
-    list.appendChild(this.listItem);
-    allNotes.push(this);
-    console.log(allNotes);
+  }
+
+  createEventListeners() {
     this.checkbox.addEventListener('click', this.setAsChecked.bind(this));
     this.deleteButton.addEventListener('click', this.getConfirmationMassage.bind(this));
     this.editButton.addEventListener('click', this.startEditState.bind(this));
-  };
+  }
+
+  appendTaskTo(parent) {
+    parent.appendChild(this.task)
+  }
 
   generateID() {
-    return allNotes.length;
+    return state.allNotes.length;
   };
 
-  getNewNote() {
-    return this.listItem;
-  };
 
   setAsChecked() {
     if(!this.isChecked) {
@@ -96,7 +102,7 @@ class Note {
       this.editButton, 
       this.deleteButton
     );
-    Utility.appendChildren(this.listItem, [
+    Utility.appendChildren(this.task, [
       this.confirmButton,
       this.cancelButton
     ]);
@@ -152,7 +158,7 @@ class Note {
   };
 
   deleteNote() {
-    this.listItem.remove();
+    this.task.remove();
     allNotes.splice(this.id, 1);
     updateUI();
     delete this;
@@ -227,7 +233,9 @@ class DownloadManager {
         this.textContent += `${note.content} \n-\n`;
       }
     })
-    
+    this.background = Utility.createHTML(`
+      <div class="download-manager-background"></div>  
+    `)
     this.downloadManager = Utility.createHTML(`
       <div class="download-manager"></div>  
     `);
@@ -250,6 +258,7 @@ class DownloadManager {
       <button class="dialog-box__btn dialog-box__btn--cancel">Cancel</button>  
     `);
 
+    this.background.appendChild(this.downloadManager);
     Utility.appendChildren(this.downloadManager, [
       this.title,
       this.fileName,
@@ -260,7 +269,7 @@ class DownloadManager {
       this.downloadBtn,
       this.cancelBtn
     ]);
-    document.body.appendChild(this.downloadManager);
+    document.body.appendChild(this.background);
 
     this.downloadBtn.addEventListener('click', (event) => {
       event.stopPropagation();
@@ -289,8 +298,7 @@ function createToDoListItem() {
     label.innerHTML = 'Write something dude.';
   }
   else {
-    const note = new Note(text);
-    note.getNewNote();
+    const task = new Task(text);
     label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
     Utility.resetInput(textInput);
     updateUI();
