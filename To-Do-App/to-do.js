@@ -26,14 +26,12 @@ class Task {
     this.createElements();
     this.appendElements();
     this.createEventListeners();
+    this.appendTaskTo(list);
 
 
 
 
 
-    this.paragraph.setAttribute('contenteditable', this.isEditable);
-
-    list.appendChild(this.task);
     state.allNotes.push(this);
   };
 
@@ -41,9 +39,16 @@ class Task {
     this.task = Utility.createHTML(`<li id="${this.id}" class="list__item"></li>`)
     this.checkbox = Utility.createHTML(`<input type="checkbox" class="item__checkbox">`)
     this.paragraph = Utility.createHTML(`<p class="item__paragraph">${this.content}.</p>`)
+    this.paragraph.setAttribute('contenteditable', this.isEditable);
     this.deleteButton = Utility.createHTML(`<button class="item__button item__button--delete">Delete</button>`)
-    this.editButton = Utility.createHTML(`<button class="item__button item__button--edit">Edit</button>`)
-  }
+    this.editButton = Utility.createHTML(`
+      <button class="item__button item__button--edit">
+        <svg class="item__button--edit__icon">
+          <use href="#edit-icon" />
+        </svg>
+      </button>
+    `)
+  };
 
   appendElements() {
     Utility.appendChildren(this.task, [
@@ -52,51 +57,41 @@ class Task {
       this.editButton,
       this.deleteButton
     ]);
-  }
+  };
 
   createEventListeners() {
     this.checkbox.addEventListener('click', this.setAsChecked.bind(this));
     this.deleteButton.addEventListener('click', this.getConfirmationMassage.bind(this));
     this.editButton.addEventListener('click', this.startEditState.bind(this));
-  }
+  };
 
   appendTaskTo(parent) {
     parent.appendChild(this.task)
-  }
+  };
 
   generateID() {
     return state.allNotes.length;
   };
 
-
   setAsChecked() {
-    if(!this.isChecked) {
-      this.isChecked = true;
-      Utility.hide(this.editButton);
-    }
-    else {
-      this.isChecked = false;
-      Utility.show(this.editButton);
-    }
-  }
-  startEditState() {
-    if(isEditStateOn) {
-      const currentNoteOldText = currentEditState.content;
+    this.isChecked = !this.isChecked;
+    this.isChecked ? Utility.hide(this.editButton) : Utility.show(this.editButton);
+  };
 
-      currentEditState.cancelEditState(currentNoteOldText);
+  startEditState() {
+    if(state.isEditStateOn) {
+      const currentNoteOldText = state.currentEditState.content;
+
+      state.currentEditState.cancelEditState(currentNoteOldText);
     }
-    isEditStateOn = true;
-    currentEditState = this;
+    state.isEditStateOn = true;
+    state.currentEditState = this;
     this.isEditable = true;
     this.paragraph.classList.add('item__paragraph--edit-state');
     this.paragraph.setAttribute('contenteditable', this.isEditable);
     Utility.placeCursorAtEnd(this.paragraph);
-    this.confirmButton = Utility.createHTML(`
-      <button class="item__button item__button--confirm">Confirm</button>    
-    `);
-    this.cancelButton = Utility.createHTML(`
-      <button class="item__button item__button--cancel">Cancel</button>    
-    `);
+    this.confirmButton = Utility.createHTML(`<button class="item__button item__button--confirm">Confirm</button>`);
+    this.cancelButton = Utility.createHTML(`<button class="item__button item__button--cancel">Cancel</button>`);
     Utility.hide(
       this.checkbox,
       this.editButton, 
@@ -112,8 +107,8 @@ class Task {
   };
 
   cancelEditState() {
-    isEditStateOn = false;
-    currentEditState = null;
+    state.isEditStateOn = false;
+    state.currentEditState = null;
     this.isEditable = false;
     this.paragraph.classList.remove('item__paragraph--edit-state');
     this.paragraph.setAttribute('contenteditable', this.isEditable);
@@ -130,8 +125,8 @@ class Task {
   };
 
   saveEditedNote() {
-    isEditStateOn = false;
-    currentEditState = null;
+    state.isEditStateOn = false;
+    state.currentEditState = null;
     this.isEditable = false;
     this.paragraph.classList.remove('item__paragraph--edit-state');
     this.paragraph.setAttribute('contenteditable', this.isEditable);
@@ -159,9 +154,8 @@ class Task {
 
   deleteNote() {
     this.task.remove();
-    allNotes.splice(this.id, 1);
+    state.allNotes.splice(this.id, 1);
     updateUI();
-    delete this;
   };
 };
 // A popup that waits for you to make your decision.
