@@ -13,13 +13,13 @@ const state = {
   isDeletePopupOpen: false,
   isEditStateOn: false,
   currentEditState: null,
-  allNotes: []
+  allTasks: []
 }
 
 class Task {
   constructor (text) {
     this.content = text;
-    this.id = this.generateID();
+    this.id = state.allTasks.length;
     this.isChecked = false;
     this.isEditable = false;
 
@@ -32,7 +32,7 @@ class Task {
 
 
 
-    state.allNotes.push(this);
+    state.allTasks.push(this);
   };
 
   createElements() {
@@ -68,43 +68,46 @@ class Task {
   appendTaskTo(parent) {
     parent.appendChild(this.task)
   };
-
-  generateID() {
-    return state.allNotes.length;
-  };
-
+  // Marks task as done and hides 'edit' button.
   setAsChecked() {
     this.isChecked = !this.isChecked;
     this.isChecked ? Utility.hide(this.editButton) : Utility.show(this.editButton);
   };
-
+  // Toggles edit state: hides 'edit'/'delete', shows 'confirm'/'cancel'.
+  // Cancels any active edit in another task and starts new edit.
   startEditState() {
     if(state.isEditStateOn) {
-      const currentNoteOldText = state.currentEditState.content;
-
-      state.currentEditState.cancelEditState(currentNoteOldText);
+      const currentTaskContent = state.currentEditState.content;
+      state.currentEditState.cancelEditState(currentTaskContent);
     }
     state.isEditStateOn = true;
     state.currentEditState = this;
     this.isEditable = true;
-    this.paragraph.classList.add('item__paragraph--edit-state');
-    this.paragraph.setAttribute('contenteditable', this.isEditable);
-    Utility.placeCursorAtEnd(this.paragraph);
-    this.confirmButton = Utility.createHTML(`<button class="item__button item__button--confirm">Confirm</button>`);
-    this.cancelButton = Utility.createHTML(`<button class="item__button item__button--cancel">Cancel</button>`);
+
+    this.createEditButtons();
+    this.enableEdit(this.paragraph);
     Utility.hide(
       this.checkbox,
       this.editButton, 
       this.deleteButton
     );
-    Utility.appendChildren(this.task, [
-      this.confirmButton,
-      this.cancelButton
-    ]);
     this.paragraph.focus();
-    this.confirmButton.addEventListener('click', () => { this.saveEditedNote(); })
-    this.cancelButton.addEventListener('click', () => { this.cancelEditState(); })
   };
+  // Makes element editable, consider adding an '--edit-state' class for styling.
+  enableEdit(element, isEditable) {
+    const className = element.classList[0];
+    element.classList.add(className + '--edit-state');
+    element.setAttribute('contenteditable', isEditable);
+    Utility.placeCursorAtEnd(element);
+  }
+  // Creates confirm/cancel buttons, adds listeners, and appends to task.
+  createEditButtons() {
+    this.confirmButton = Utility.createHTML(`<button class="item__button item__button--confirm">Confirm</button>`);
+    this.cancelButton = Utility.createHTML(`<button class="item__button item__button--cancel">Cancel</button>`);
+    this.confirmButton.addEventListener('click', () => {this.saveEditedNote();})
+    this.cancelButton.addEventListener('click', () => {this.cancelEditState();})
+    Utility.appendChildren(this.task, [this.confirmButton, this.cancelButton]);
+  }
 
   cancelEditState() {
     state.isEditStateOn = false;
@@ -154,7 +157,7 @@ class Task {
 
   deleteNote() {
     this.task.remove();
-    state.allNotes.splice(this.id, 1);
+    state.allTasks.splice(this.id, 1);
     updateUI();
   };
 };
@@ -219,7 +222,7 @@ class DownloadManager {
 
     this.textContent = '';
 
-    allNotes.forEach(note => {
+    state.allTasks.forEach(note => {
       if(note.isChecked) {
         this.textContent += `{-Checked-} => ${note.content} \n-\n`;
       }
