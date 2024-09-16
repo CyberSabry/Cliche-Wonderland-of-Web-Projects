@@ -23,56 +23,42 @@ class Task {
     this.isChecked = false;
     this.isEditable = false;
 
-    this.createElements();
-    this.appendElements();
+    this.createUI();
     this.createEventListeners();
     this.appendTaskTo(list);
 
-
-
-
-
     state.allTasks.push(this);
-  };
+  }
 
-  createElements() {
-    this.task = Utility.createHTML(`<li id="${this.id}" class="list__item"></li>`)
-    this.checkbox = Utility.createHTML(`<input type="checkbox" class="item__checkbox">`)
-    this.paragraph = Utility.createHTML(`<p class="item__paragraph">${this.content}.</p>`)
-    this.paragraph.setAttribute('contenteditable', this.isEditable);
-    this.deleteButton = Utility.createHTML(`<button class="item__button item__button--delete">Delete</button>`)
+  createUI() {
+    this.task = Utility.createHTML(`<li id="${this.id}" class="list__item"></li>`);
+    this.checkbox = Utility.createHTML(`<input type="checkbox" class="item__checkbox">`);
+    this.paragraph = Utility.createHTML(`<p class="item__paragraph">${this.content}.</p>`);
+    this.deleteButton = Utility.createHTML(`<button class="item__button item__button--delete">Delete</button>`);
     this.editButton = Utility.createHTML(`
       <button class="item__button item__button--edit">
         <svg class="item__button--edit__icon">
           <use href="#edit-icon" />
         </svg>
       </button>
-    `)
-  };
-
-  appendElements() {
-    Utility.appendChildren(this.task, [
-      this.checkbox,
-      this.paragraph,
-      this.editButton,
-      this.deleteButton
-    ]);
-  };
+    `);
+    Utility.appendChildren(this.task, [this.checkbox, this.paragraph, this.editButton, this.deleteButton]);
+  }
 
   createEventListeners() {
     this.checkbox.addEventListener('click', this.setAsChecked.bind(this));
-    this.deleteButton.addEventListener('click', this.getConfirmationMassage.bind(this));
+    this.deleteButton.addEventListener('click', this.beginDelete.bind(this));
     this.editButton.addEventListener('click', this.startEditState.bind(this));
-  };
+  }
 
   appendTaskTo(parent) {
     parent.appendChild(this.task)
-  };
+  }
   // Marks task as done and hides 'edit' button.
   setAsChecked() {
     this.isChecked = !this.isChecked;
     this.isChecked ? Utility.hide(this.editButton) : Utility.show(this.editButton);
-  };
+  }
   // Toggles edit state: hides 'edit'/'delete', shows 'confirm'/'cancel'.
   // Cancels any active edit in another task and starts new edit.
   startEditState() {
@@ -85,141 +71,142 @@ class Task {
     this.isEditable = true;
 
     this.createEditButtons();
-    this.enableEdit(this.paragraph);
-    Utility.hide(
-      this.checkbox,
-      this.editButton, 
-      this.deleteButton
-    );
+    this.toggleEdit(this.paragraph, this.isEditable);
+    Utility.hide(this.checkbox, this.editButton, this.deleteButton);
     this.paragraph.focus();
-  };
-  // Makes element editable, consider adding an '--edit-state' class for styling.
-  enableEdit(element, isEditable) {
+  }
+  // Saves the edited note, updates the content, resets edit state, and handles UI changes.
+  saveEdit() {
+    state.isEditStateOn = false;
+    state.currentEditState = null;
+    this.isEditable = false;
+
+    const newText = this.paragraph.textContent.trim();
+    this.toggleEdit(this.paragraph, this.isEditable);
+    this.content = newText;
+    this.paragraph.textContent = this.content;
+    Utility.remove(this.confirmButton, this.cancelButton);
+    Utility.show(this.checkbox, this.editButton, this.deleteButton);
+    if (newText === '') {
+      this.deleteTask();
+    }
+    updateUI();
+  }
+  // Cancels the edit state and brings back old buttons.
+  cancelEditState() {
+    state.isEditStateOn = false;
+    state.currentEditState = null;
+    this.isEditable = false;
+
+    this.paragraph.textContent = this.content;
+    this.toggleEdit(this.paragraph, this.isEditable);
+    this.removeEditButtons();
+    Utility.show(this.checkbox, this.editButton, this.deleteButton);
+  }
+  // Toggles element's editable state and applies '--edit-state' class for styling.
+  toggleEdit(element, isEditable) {
     const className = element.classList[0];
-    element.classList.add(className + '--edit-state');
+    if(isEditable) {
+      element.classList.add(className + '--edit-state');
+      Utility.placeCursorAtEnd(element);
+    }
+    else {
+      element.classList.remove(className + '--edit-state');
+    }
     element.setAttribute('contenteditable', isEditable);
-    Utility.placeCursorAtEnd(element);
   }
   // Creates confirm/cancel buttons, adds listeners, and appends to task.
   createEditButtons() {
     this.confirmButton = Utility.createHTML(`<button class="item__button item__button--confirm">Confirm</button>`);
     this.cancelButton = Utility.createHTML(`<button class="item__button item__button--cancel">Cancel</button>`);
-    this.confirmButton.addEventListener('click', () => {this.saveEditedNote();})
+    this.confirmButton.addEventListener('click', () => {this.saveEdit();})
     this.cancelButton.addEventListener('click', () => {this.cancelEditState();})
     Utility.appendChildren(this.task, [this.confirmButton, this.cancelButton]);
   }
+  // Removes confirm/cancel buttons, and their listeners.
+  removeEditButtons() {
+    Utility.remove(this.confirmButton, this.cancelButton);
+  }
 
-  cancelEditState() {
-    state.isEditStateOn = false;
-    state.currentEditState = null;
-    this.isEditable = false;
-    this.paragraph.classList.remove('item__paragraph--edit-state');
-    this.paragraph.setAttribute('contenteditable', this.isEditable);
-    this.paragraph.textContent = this.content;
-    Utility.remove(
-      this.confirmButton, 
-      this.cancelButton
-    );
-    Utility.show(
-      this.checkbox,
-      this.editButton, 
-      this.deleteButton
-    );
-  };
+  beginDelete() {
+    const popup = new ConfirmationPopup(this, 'Are you sure you want to delete this task?')
+    popup.getPromise()
+    .then(() => {
+      this.deleteTask();
+    })
+    .catch(() => {
+      console.log('Task deletion canceled.')
+    })
+  }
 
-  saveEditedNote() {
-    state.isEditStateOn = false;
-    state.currentEditState = null;
-    this.isEditable = false;
-    this.paragraph.classList.remove('item__paragraph--edit-state');
-    this.paragraph.setAttribute('contenteditable', this.isEditable);
-    const newText = this.paragraph.textContent.trim();
-    this.content = newText;
-    this.paragraph.textContent = this.content;
-    Utility.remove(
-      this.confirmButton, 
-      this.cancelButton
-    );
-    Utility.show(
-      this.checkbox,
-      this.editButton, 
-      this.deleteButton
-    );
-    if (newText === '') {
-      this.deleteNote();
-    }
-    updateUI();
-  };
-
-  getConfirmationMassage() {
-    new ConfirmationPopup(this, 'Are you sure you want to delete this note?');
-  };
-
-  deleteNote() {
+  deleteTask() {
     this.task.remove();
     state.allTasks.splice(this.id, 1);
     updateUI();
-  };
+  }
 };
 // A popup that waits for you to make your decision.
 class ConfirmationPopup {
   constructor(note, massage) {
-    if(isDeletePopupOpen) {
+    if(state.isDeletePopupOpen) {
       return;
     }
-    isDeletePopupOpen = true;
+    state.isDeletePopupOpen = true;
     this.note = note;
 
-    this.background = Utility.createHTML(`
-      <div class="popup-background"></div>    
-    `)
-    this.popup = Utility.createHTML(`
-      <div class="popup"></div>
-    `)
-    this.massage = Utility.createHTML(`
-      <p class="popup__massage">${massage}</p>        
-    `)
-    this.buttonsContainer = Utility.createHTML(`
-      <div class="popup__controls-container"></div>     
-    `)
-    this.confirmationButton = Utility.createHTML(`
-      <button class="popup__button popup__button--yes">Yes</button>
-    `)
-    this.cancelationButton = Utility.createHTML(`
-      <button class="popup__button popup__button--no">No</button>
-    `)
+    this.createUI(massage);
+    this.appendPopupTo(document.body);
+    this.createEventListeners();
+    this.getPromise();
+  }
 
-    Utility.appendChildren(this.popup, [
-      this.massage,
-      this.buttonsContainer
-    ]);
-    Utility.appendChildren(this.buttonsContainer, [
-      this.confirmationButton,
-      this.cancelationButton
-    ]);
+  createUI(massage) {
+    this.background = Utility.createHTML(`<div class="popup-background"></div>`);
+    this.popup = Utility.createHTML(`<div class="popup"></div>`);
+    this.massage = Utility.createHTML(`<p class="popup__massage">${massage}</p>`);
+    this.buttonsContainer = Utility.createHTML(`<div class="popup__controls-container"></div>`);
+    this.confirmationButton = Utility.createHTML(`<button class="popup__button popup__button--yes">Yes</button>`);
+    this.cancelationButton = Utility.createHTML(`<button class="popup__button popup__button--no">No</button>`);
+    Utility.appendChildren(this.popup, [this.massage, this.buttonsContainer]);
+    Utility.appendChildren(this.buttonsContainer, [this.confirmationButton, this.cancelationButton]);
     this.background.appendChild(this.popup);
-    document.body.appendChild(this.background);
+  }
 
+  createEventListeners() {
     this.confirmationButton.addEventListener('click', this.confirm.bind(this));
-    this.cancelationButton.addEventListener('click', this.deletePopup.bind(this));
+    this.cancelationButton.addEventListener('click', this.cancel.bind(this));
+  }
+
+  appendPopupTo(parent) {
+    parent.appendChild(this.background);
+  }
+
+  getPromise() {
+    return new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    });
   }
 
   confirm() {
-    this.note.deleteNote();
-    isDeletePopupOpen = false;
+    this.resolve();
+    state.isDeletePopupOpen = false;
+    this.deletePopup();
+  }
+
+  cancel() {
+    this.reject();
+    state.isDeletePopupOpen = false;
     this.deletePopup();
   }
 
   deletePopup() {
-    isDeletePopupOpen = false;
     Utility.remove(this.background);
-    delete this;
   }
 };
 // Download manager popup.
 class DownloadManager {
   constructor() {
-
     this.textContent = '';
 
     state.allTasks.forEach(note => {
@@ -230,48 +217,32 @@ class DownloadManager {
         this.textContent += `${note.content} \n-\n`;
       }
     })
-    this.background = Utility.createHTML(`
-      <div class="download-manager-background"></div>  
-    `)
-    this.downloadManager = Utility.createHTML(`
-      <div class="download-manager"></div>  
-    `);
-    this.title = Utility.createHTML(`
-      <h2 class="download-manager__title">Download</h2>  
-    `);
-    this.fileName = Utility.createHTML(`
-      <p class="download-manager__file-name" contenteditable="true">To-Do</p>  
-    `)
-    this.content = Utility.createHTML(`
-      <pre class="download-manager__content" contenteditable="true">${this.textContent}</pre>
-    `);
-    this.dialogBox = Utility.createHTML(`
-      <div class="download-manager__dialog-box"></div>  
-    `);
-    this.downloadBtn = Utility.createHTML(`
-      <a class="dialog-box__btn dialog-box__btn--download">Download</a>  
-    `);
-    this.cancelBtn = Utility.createHTML(`
-      <button class="dialog-box__btn dialog-box__btn--cancel">Cancel</button>  
-    `);
+    this.createUI(this.content);
+    this.appendDownloadManagerTo(document.body);
 
-    this.background.appendChild(this.downloadManager);
-    Utility.appendChildren(this.downloadManager, [
-      this.title,
-      this.fileName,
-      this.content,
-      this.dialogBox
-    ]);
-    Utility.appendChildren(this.dialogBox, [
-      this.downloadBtn,
-      this.cancelBtn
-    ]);
-    document.body.appendChild(this.background);
 
     this.downloadBtn.addEventListener('click', (event) => {
       event.stopPropagation();
       this.createTxtFile(this.textContent)
     });
+  }
+
+  createUI(textContent) {
+    this.background = Utility.createHTML(`<div class="download-manager-background"></div>`);
+    this.downloadManager = Utility.createHTML(`<div class="download-manager"></div>`);
+    this.title = Utility.createHTML(`<h2 class="download-manager__title">Download</h2>`);
+    this.fileName = Utility.createHTML(`<p class="download-manager__file-name" contenteditable="true">To-Do</p>`)
+    this.content = Utility.createHTML(`<pre class="download-manager__content" contenteditable="true">${textContent}</pre>`);
+    this.dialogBox = Utility.createHTML(`<div class="download-manager__dialog-box"></div>`);
+    this.downloadBtn = Utility.createHTML(`<a class="dialog-box__btn dialog-box__btn--download">Download</a>`);
+    this.cancelBtn = Utility.createHTML(`<button class="dialog-box__btn dialog-box__btn--cancel">Cancel</button>`);
+    this.background.appendChild(this.downloadManager);
+    Utility.appendChildren(this.downloadManager, [this.title, this.fileName, this.content, this.dialogBox]);
+    Utility.appendChildren(this.dialogBox, [this.downloadBtn, this.cancelBtn]);
+  }
+
+  appendDownloadManagerTo(parent) {
+    parent.appendChild(this.background);
   }
   // Takes all the added notes and puts them in a (txt) file that you download on your computer.
   createTxtFile(textContent) {
