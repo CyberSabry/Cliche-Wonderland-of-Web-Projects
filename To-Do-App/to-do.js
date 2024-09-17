@@ -2,8 +2,7 @@ import Utility from "../main.js";
 
 const textInput = document.querySelector('.text-input');
 const addButton = document.querySelector('.add-button');
-const downloadButton = document.querySelector('.download-button');
-const downloadButtonAnchor = document.querySelector('.download-button__anchor')
+const downloadBtn = document.querySelector('.download-button');
 const listContainer = document.querySelector('.container');
 const list = document.querySelector('.list');
 const label = document.querySelector('.label');
@@ -25,7 +24,6 @@ class Task {
 
     this.createUI();
     this.createEventListeners();
-    this.appendTaskTo(list);
 
     state.allTasks.push(this);
   }
@@ -204,107 +202,118 @@ class ConfirmationPopup {
     Utility.remove(this.background);
   }
 };
-// Download manager popup.
+// Accesses the allTasks state to retrieve tasks for download as a .txt file.
 class DownloadManager {
   constructor() {
     this.textContent = '';
 
-    state.allTasks.forEach(note => {
-      if(note.isChecked) {
-        this.textContent += `{-Checked-} => ${note.content} \n-\n`;
+    state.allTasks.forEach(task => {
+      if(task.isChecked) {
+        this.textContent += `[✔] ${task.content} \n-\n`;
       }
       else {
-        this.textContent += `${note.content} \n-\n`;
+        this.textContent += `${task.content} \n-\n`;
       }
     })
-    this.createUI(this.content);
+    this.createUI(this.textContent);
     this.appendDownloadManagerTo(document.body);
-
-
-    this.downloadBtn.addEventListener('click', (event) => {
-      event.stopPropagation();
-      this.createTxtFile(this.textContent)
-    });
+    this.createEventListeners();
   }
 
   createUI(textContent) {
     this.background = Utility.createHTML(`<div class="download-manager-background"></div>`);
     this.downloadManager = Utility.createHTML(`<div class="download-manager"></div>`);
     this.title = Utility.createHTML(`<h2 class="download-manager__title">Download</h2>`);
-    this.fileName = Utility.createHTML(`<p class="download-manager__file-name" contenteditable="true">To-Do</p>`)
+    this.fileNameContainer = Utility.createHTML(`<div class="download-manager__file-name-container"></div>`)
+    this.fileNameTitle = Utility.createHTML(`<label for="download-manager__file-name">File name:</label>`)
+    this.fileName = Utility.createHTML(`<p class="download-manager__file-name" id="download-manager__file-name" contenteditable="true">To-Do</p>`)
     this.content = Utility.createHTML(`<pre class="download-manager__content" contenteditable="true">${textContent}</pre>`);
     this.dialogBox = Utility.createHTML(`<div class="download-manager__dialog-box"></div>`);
     this.downloadBtn = Utility.createHTML(`<a class="dialog-box__btn dialog-box__btn--download">Download</a>`);
-    this.cancelBtn = Utility.createHTML(`<button class="dialog-box__btn dialog-box__btn--cancel">Cancel</button>`);
+    this.closeBtn = Utility.createHTML(`<button class="dialog-box__btn dialog-box__btn--close">Close</button>`);
     this.background.appendChild(this.downloadManager);
-    Utility.appendChildren(this.downloadManager, [this.title, this.fileName, this.content, this.dialogBox]);
-    Utility.appendChildren(this.dialogBox, [this.downloadBtn, this.cancelBtn]);
+    Utility.appendChildren(this.downloadManager, [this.title, this.fileNameContainer, this.content, this.dialogBox]);
+    Utility.appendChildren(this.fileNameContainer, [this.fileNameTitle, this.fileName]);
+    Utility.appendChildren(this.dialogBox, [this.downloadBtn, this.closeBtn]);
+  }
+
+  createEventListeners() {
+    this.closeBtn.addEventListener('click', this.close.bind(this));
+    this.downloadBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      this.downloadTxtFile();
+    });
   }
 
   appendDownloadManagerTo(parent) {
     parent.appendChild(this.background);
   }
   // Takes all the added notes and puts them in a (txt) file that you download on your computer.
-  createTxtFile(textContent) {
+  downloadTxtFile() {
     let fileName = this.fileName.textContent.trim();
-    
-      const blob = new Blob([textContent], {type: 'text/plain'});
-      const url = URL.createObjectURL(blob);
-      this.downloadBtn.href = url;
-      this.downloadBtn.download = fileName + '.txt';
-      URL.revokeObjectURL(url);
-      console.log(fileName)
-      console.log('download should be triggerd')
+    const text = this.content.textContent;
+    const blob = new Blob([text], {type: 'text/plain'});
+    const url = URL.createObjectURL(blob);
+    this.downloadBtn.href = url;
+    this.downloadBtn.download = fileName + '.txt';
+    URL.revokeObjectURL(url);
+    // When i try to close it without a delay it breaks for some reason.
+    setTimeout(this.close.bind(this), 100);
   };
-};
-// this one should be the main function that combines them all
-function createToDoListItem() {
-  let isInputEmpty = checkEmptyInput(textInput.value);
-  let text = textInput.value
 
-  if (isInputEmpty) {
-    label.innerHTML = 'Write something dude.';
+  close() {
+    Utility.remove(this.background);
   }
-  else {
-    const task = new Task(text);
-    label.innerHTML = 'Please pretend that you saw this idea for the first time and embrace it';
-    Utility.resetInput(textInput);
-    updateUI();
+};
+// Handles user's input and making it in a task.
+function createTask() {
+  if (isInputEmpty(textInput.value)) {
+    label.textContent = 'Write something dude.';
+    return;
   }
+  
+  label.textContent = 'Please pretend that you saw this idea for the first time and embrace it';
+  const task = new Task(textInput.value);
+  task.appendTaskTo(list);
+
+  Utility.resetInput(textInput);
+  updateUI();
 };
 // Checks if the input is empty it returns true and if its not empty its false.
-function checkEmptyInput(input) {
-  if (input === '') {
-    return true;
-  }
-  else {
-    return false;
-  }
+function isInputEmpty(input) {
+  return input === '' ?  true : false;
 };
-// Updates the container visibility so if we don`t have any notes inside it hides it.
+// Updates the visibility of the container and download button. Hides them if there are no tasks inside.
 function updateUI() {
-  if (list.children.length > 0) {
-    Utility.show(
-      listContainer,
-      downloadButton
-    );
-  }
-  else {
-    Utility.hide(
-      listContainer,
-      downloadButton
-    );
-  }
+  const hasItems = list.children.length > 0;
+  hasItems ? Utility.show(listContainer, downloadBtn) : Utility.hide(listContainer, downloadBtn);
 };
-// Stuff happens when you first load the page!.
+// Stuff happens when you first load the page!
 document.addEventListener('DOMContentLoaded', () => {
-  document.addEventListener('keydown', (event) => { 
+  // Focus on text input when "/" key is pressed.
+  document.addEventListener('keydown', focusTextInput);
+
+  // Create a task when "Enter" key is pressed in text input.
+  textInput.addEventListener('keydown', createTaskWhenPressEnter);
+
+  // Create a task when the Add button is clicked.
+  addButton.addEventListener('click', createTask);
+
+  // Open the Download Manager when the Download button is clicked.
+  downloadBtn.addEventListener('click', openDownloadManager);
+
+  function focusTextInput(event) {
     if(event.key === '/') { 
       event.preventDefault(); 
       textInput.focus();
-    };
-  });
-  textInput.addEventListener('keydown', (event) => { if(event.key === 'Enter') { createToDoListItem(); /*createTxtFile();*/ } });
-  addButton.addEventListener('click', () => { createToDoListItem(); /*createTxtFile();*/});
-  document.querySelector('#test').addEventListener('click', () => { new DownloadManager })
+    }
+  };
+  function createTaskWhenPressEnter(event) {
+    if(event.key === 'Enter') {
+      createTask();
+    }
+  };
+  function openDownloadManager() {
+    new DownloadManager();
+  };
 });

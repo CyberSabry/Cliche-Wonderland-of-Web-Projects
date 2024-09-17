@@ -101,13 +101,15 @@ textarea {
 	background: var(--ui-interactive-bg-clr-low-op);
   backdrop-filter: blur(3rem);
 }
-.item__button--edit:hover .item__button--edit__icon {
-	fill: var(--positive-clr);
+
+.item__button--edit {
+	display: flex;
+	place-items: center;
+} .item__button--edit:hover .item__button--edit__icon {
 	stroke: var(--positive-clr);
-}
-.item__button--edit__icon {
-	width: 32px;
-	height: 32px;
+} .item__button--edit__icon {
+	width: 24px;
+	height: 24px;
 }
 
 .item__button {
@@ -146,7 +148,12 @@ textarea {
 	color: var(--font-clr);
 	background: var(--bg-dark-clr-low-op);
   backdrop-filter: blur(3rem);
-} 
+}
+.download-manager__file-name-container {
+	display: flex;
+	place-items: center;
+	gap: 0.50rem;
+}
 .download-manager__title {
 	color: var(--sub-hdr-font-clr);
 } 
@@ -201,7 +208,7 @@ textarea {
 } .dialog-box__btn--download:active {
   background: var(--click-clr);
 } 
-.dialog-box__btn--cancel {
+.dialog-box__btn--close {
 	color: var(--negative-clr);
 }
 
