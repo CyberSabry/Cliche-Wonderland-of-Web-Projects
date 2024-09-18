@@ -30,7 +30,6 @@ textarea {
 .text-input {
 	width: 50%;
 }
-
 .download-button--hidden {
 	display: none;
 }
@@ -64,6 +63,7 @@ textarea {
 	place-items: center;
 	width: 100%;
 	padding: 1rem 0;
+	animation: fadeIN 100ms ease forwards;
 }
 .list__item + .list__item {
 	border-top: 2px solid var(--hr-clr);
@@ -102,23 +102,18 @@ textarea {
   backdrop-filter: blur(3rem);
 }
 
-.item__button--edit {
-	display: flex;
-	place-items: center;
-} .item__button--edit:hover .item__button--edit__icon {
-	stroke: var(--positive-clr);
-} .item__button--edit__icon {
-	width: 24px;
-	height: 24px;
-}
-
 .item__button {
-	padding: 0.25em 0.50em;
 	max-height: 3rem;
 	margin-inline: 0.25rem;
 }
 .item__button--hidden {
 	display: none;
+}
+.item__button--edit:hover {
+	color: var(--positive-clr);
+}
+.item__button--delete:hover {
+	color: var(--negative-clr);
 }
 
 .download-manager-background {
@@ -247,7 +242,42 @@ textarea {
 	color: var(--positive-clr);
 }
 .popup__button--no,
-.item__button--delete,
 .item__button--cancel {
 	color: var(--negative-clr);
+}
+
+.fade-in {
+	animation: fadeIn 100ms ease-in-out forwards;
+}
+
+.slide-in {
+	animation: slideIn 100ms ease-in-out forwards;
+}
+.slide-fade-out {
+	animation: slideFadeOut 100ms ease-in-out forwards;
+}
+
+@keyframes slideIn {
+	0% {
+		opacity: 0;
+		transform: translateX(-100%) 
+	}
+	100% { 
+		opacity: 1;
+		transform: translateX(0) 
+	}
+}
+@keyframes slideFadeOut {
+	0% {
+		opacity: 1;
+		transform: translateX(0) 
+	}
+	100% { 
+		opacity: 0;
+		transform: translateX(100%) 
+	}
+}
+@keyframes fadeIn {
+	0%   { opacity: 0; }
+	100% { opacity: 1; }
 }

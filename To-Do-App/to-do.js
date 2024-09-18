@@ -33,13 +33,7 @@ class Task {
     this.checkbox = Utility.createHTML(`<input type="checkbox" class="item__checkbox">`);
     this.paragraph = Utility.createHTML(`<p class="item__paragraph">${this.content}.</p>`);
     this.deleteButton = Utility.createHTML(`<button class="item__button item__button--delete">Delete</button>`);
-    this.editButton = Utility.createHTML(`
-      <button class="item__button item__button--edit">
-        <svg class="item__button--edit__icon">
-          <use href="#edit-icon" />
-        </svg>
-      </button>
-    `);
+    this.editButton = Utility.createHTML(`<button class="item__button item__button--edit">Edit</button>`);
     Utility.appendChildren(this.task, [this.checkbox, this.paragraph, this.editButton, this.deleteButton]);
   }
 
@@ -138,9 +132,12 @@ class Task {
   }
 
   deleteTask() {
-    this.task.remove();
-    state.allTasks.splice(this.id, 1);
-    updateUI();
+    Utility.animate(this.task, 'slide-fade-out');
+    setTimeout(() => {
+      this.task.remove();
+      state.allTasks.splice(this.id, 1);
+      updateUI();
+    }, 100);
   }
 };
 // A popup that waits for you to make your decision.
@@ -285,8 +282,14 @@ function isInputEmpty(input) {
 };
 // Updates the visibility of the container and download button. Hides them if there are no tasks inside.
 function updateUI() {
-  const hasItems = list.children.length > 0;
-  hasItems ? Utility.show(listContainer, downloadBtn) : Utility.hide(listContainer, downloadBtn);
+  if(list.children.length > 0) {
+    Utility.show(listContainer, downloadBtn);
+    Utility.animate(downloadBtn, 'slide-in');
+    Utility.animate(listContainer, 'fade-in');
+  }
+  else {
+    Utility.hide(listContainer, downloadBtn);
+  }
 };
 // Stuff happens when you first load the page!
 document.addEventListener('DOMContentLoaded', () => {
