@@ -55,6 +55,7 @@ textarea {
 	width: 100%;
 	padding: 0;
 	list-style: none;
+	overflow: hidden;
 }
 
 .list__item {
@@ -62,7 +63,7 @@ textarea {
 	display: flex;
 	place-items: center;
 	width: 100%;
-	padding: 1rem 0;
+	padding: 1rem 0.25rem;
 	animation: fadeIN 100ms ease forwards;
 }
 .list__item + .list__item {
@@ -249,12 +250,19 @@ textarea {
 .fade-in {
 	animation: fadeIn 100ms ease-in-out forwards;
 }
+.fade-out {
+	animation: fadeOut 100ms ease-in-out forwards;
+}
 
 .slide-in {
 	animation: slideIn 100ms ease-in-out forwards;
 }
 .slide-fade-out {
 	animation: slideFadeOut 100ms ease-in-out forwards;
+}
+
+.expand {
+	animation: expand 100ms ease-in-out forwards;
 }
 
 @keyframes slideIn {
@@ -280,4 +288,13 @@ textarea {
 @keyframes fadeIn {
 	0%   { opacity: 0; }
 	100% { opacity: 1; }
+}
+@keyframes fadeOut {
+	0%   { opacity: 1; }
+	100% { opacity: 0; }
+}
+
+@keyframes expand {
+	0% { width: 0% }
+	100% { width: 100% }
 }

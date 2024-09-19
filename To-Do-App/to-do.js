@@ -65,6 +65,7 @@ class Task {
     this.createEditButtons();
     this.toggleEdit(this.paragraph, this.isEditable);
     Utility.hide(this.checkbox, this.editButton, this.deleteButton);
+    Utility.animate(this.paragraph, 'expand');
     this.paragraph.focus();
   }
   // Saves the edited note, updates the content, resets edit state, and handles UI changes.
@@ -114,10 +115,16 @@ class Task {
     this.confirmButton.addEventListener('click', () => {this.saveEdit();})
     this.cancelButton.addEventListener('click', () => {this.cancelEditState();})
     Utility.appendChildren(this.task, [this.confirmButton, this.cancelButton]);
+    Utility.animate(this.confirmButton, 'fade-in');
+    Utility.animate(this.cancelButton, 'fade-in');
   }
   // Removes confirm/cancel buttons, and their listeners.
   removeEditButtons() {
-    Utility.remove(this.confirmButton, this.cancelButton);
+    Utility.animate(this.confirmButton, 'fade-out');
+    Utility.animate(this.cancelButton, 'fade-out');
+    setTimeout(() => {
+      Utility.remove(this.confirmButton, this.cancelButton);
+    }, 100);
   }
 
   beginDelete() {
@@ -284,8 +291,6 @@ function isInputEmpty(input) {
 function updateUI() {
   if(list.children.length > 0) {
     Utility.show(listContainer, downloadBtn);
-    Utility.animate(downloadBtn, 'slide-in');
-    Utility.animate(listContainer, 'fade-in');
   }
   else {
     Utility.hide(listContainer, downloadBtn);
